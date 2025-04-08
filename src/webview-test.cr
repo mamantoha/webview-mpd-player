@@ -96,8 +96,13 @@ webview.bind("get_playback_state", Webview::JSProc.new { |a|
 
 webview.bind("get_current_position", Webview::JSProc.new { |a|
   if status = client.status
-    elapsed = status["elapsed"].to_f
-    total = status["duration"].to_f
+    if status["state"] == "stop"
+      elapsed = total = 0.0
+    else
+      elapsed = status["elapsed"].to_f
+      total = status["duration"].to_f
+    end
+
     JSON::Any.new("#{elapsed}/#{total}")
   else
     JSON::Any.new("0/0")
