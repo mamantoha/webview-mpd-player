@@ -9,7 +9,14 @@ def update_song_js(wv : Webview::Webview, title : String)
   wv.title = title
 end
 
-webview = Webview.window(640, 480, Webview::SizeHints::NONE, "MPD Controller", "file://#{__DIR__}/index.html")
+webview = Webview.window(
+  640,
+  480,
+  Webview::SizeHints::NONE,
+  "MPD Controller",
+  "file://#{__DIR__}/index.html",
+  true
+)
 
 Thread.new do
   mpd = MPD::Client.new(with_callbacks: true)
