@@ -71,7 +71,7 @@
     <button onclick="next()">⏭️</button>
 
     <div id="progress-container">
-      <input type="range" id="progress-bar" min="0" max="100" value="0">
+      <input type="range" id="progress-bar" min="0" max="100" value="0" oninput="handleSeek(event)">
       <div id="time-display">
         <span id="current-time">0:00</span>
         <span id="total-time">0:00</span>
@@ -141,6 +141,14 @@
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = Math.floor(seconds % 60);
         return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+      }
+
+      function handleSeek(event) {
+        const progressBar = event.target;
+        const position = progressBar.value / 100; // Convert to 0-1 range
+        set_song_position(position).then(() => {
+          // The progress will be updated by the backend's elapsed event
+        });
       }
     </script>
   </body>

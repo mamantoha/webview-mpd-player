@@ -85,5 +85,17 @@ webview.bind("get_playback_state", Webview::JSProc.new { |a|
   JSON::Any.new(resp)
 })
 
+webview.bind("set_song_position", Webview::JSProc.new { |a|
+  relative = a.first.as_f
+
+  if current_song = client.currentsong
+    total = current_song["Time"].to_i
+    time = (total * relative).to_i
+    client.seekcur(time)
+  end
+
+  JSON::Any.new("OK")
+})
+
 webview.run
 webview.destroy
