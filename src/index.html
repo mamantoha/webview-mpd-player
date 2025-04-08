@@ -85,6 +85,9 @@
           updateSong(song);
         });
         updatePlayButton();
+        get_current_position().then(function(position) {
+          updateProgressBar(position);
+        });
       }
 
       function toggle() {

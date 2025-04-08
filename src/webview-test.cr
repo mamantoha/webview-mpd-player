@@ -85,6 +85,16 @@ webview.bind("get_playback_state", Webview::JSProc.new { |a|
   JSON::Any.new(resp)
 })
 
+webview.bind("get_current_position", Webview::JSProc.new { |a|
+  if status = client.status
+    elapsed = status["elapsed"].to_f
+    total = status["duration"].to_f
+    JSON::Any.new("#{elapsed}/#{total}")
+  else
+    JSON::Any.new("0/0")
+  end
+})
+
 webview.bind("set_song_position", Webview::JSProc.new { |a|
   relative = a.first.as_f
 
