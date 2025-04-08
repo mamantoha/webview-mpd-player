@@ -1,74 +1,98 @@
-// On page load, show current song and play state
-window.onload = function () {
-  current_song().then(function (song) {
-    updateSong(song);
-  });
-  updatePlayButton();
-  get_current_position().then(function (position) {
-    updateProgressBar(position);
-  });
-};
+class MPDClient {
+  constructor() {
+    this.initialize();
+  }
 
-function toggle() {
-  toggle_playback().then(function (response) {
-    console.log("Playback toggled:", response);
-    updatePlayButton();
-    current_song().then(function (song) {
-      updateSong(song);
+  async initialize() {
+    // Wait for the bound functions to be available
+    await this.waitForFunctions();
+    await this.updateSong();
+    await this.updatePlayButton();
+    await this.updateProgress();
+  }
+
+  async waitForFunctions() {
+    const requiredFunctions = [
+      'current_song',
+      'get_playback_state',
+      'get_current_position',
+      'toggle_playback',
+      'next_song',
+      'prev_song',
+      'set_song_position'
+    ];
+
+    return new Promise((resolve) => {
+      const checkFunctions = () => {
+        const allAvailable = requiredFunctions.every(func => typeof window[`mpdClient.${func}`] === 'function');
+        if (allAvailable) {
+          resolve();
+        } else {
+          setTimeout(checkFunctions, 100);
+        }
+      };
+      checkFunctions();
     });
-  });
-}
+  }
 
-function next() {
-  next_song().then(() => {
-    current_song().then(function (song) {
-      updateSong(song);
-    });
-  });
-}
+  async updateSong() {
+    const song = await window['mpdClient.current_song']();
+    document.getElementById("current-song").innerText = song;
+  }
 
-function prev() {
-  prev_song().then(() => {
-    current_song().then(function (song) {
-      updateSong(song);
-    });
-  });
-}
-
-function updateSong(text) {
-  document.getElementById("current-song").innerText = text;
-}
-
-function updatePlayButton() {
-  get_playback_state().then(function (state) {
+  async updatePlayButton() {
+    const state = await window['mpdClient.get_playback_state']();
     const button = document.getElementById("play-button");
     button.innerText = state === "play" ? "⏸️" : "▶️";
-  });
+  }
+
+  async updateProgress() {
+    const position = await window['mpdClient.get_current_position']();
+    this.updateProgressBar(position);
+  }
+
+  updateProgressBar(progress) {
+    const progressBar = document.getElementById("progress-bar");
+    const currentTime = document.getElementById("current-time");
+    const totalTime = document.getElementById("total-time");
+
+    const [elapsed, total] = progress.split('/').map(Number);
+    const progressPercent = (elapsed / total) * 100;
+
+    progressBar.value = progressPercent;
+    currentTime.textContent = this.formatTime(elapsed);
+    totalTime.textContent = this.formatTime(total);
+  }
+
+  formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+  async toggle() {
+    const response = await window['mpdClient.toggle_playback']();
+    console.log("Playback toggled:", response);
+    await this.updatePlayButton();
+    await this.updateSong();
+  }
+
+  async next() {
+    await window['mpdClient.next_song']();
+    await this.updateSong();
+  }
+
+  async prev() {
+    await window['mpdClient.prev_song']();
+    await this.updateSong();
+  }
+
+  async seek(position) {
+    await window['mpdClient.set_song_position'](position);
+  }
 }
 
-function updateProgressBar(progress) {
-  const progressBar = document.getElementById("progress-bar");
-  const currentTime = document.getElementById("current-time");
-  const totalTime = document.getElementById("total-time");
-
-  const [elapsed, total] = progress.split("/").map(Number);
-  const progressPercent = (elapsed / total) * 100;
-
-  progressBar.value = progressPercent;
-  currentTime.textContent = formatTime(elapsed);
-  totalTime.textContent = formatTime(total);
-}
-
-function formatTime(seconds) {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
-  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-}
-
-function handleSeek(event) {
-  const progressBar = event.target;
-  const position = progressBar.value / 100; // Convert to 0-1 range
-  set_song_position(position).then(() => {
-    // The progress will be updated by the backend's elapsed event
-  });
-}
+// Initialize the client when the page loads
+window.onload = function() {
+  window.mpdClient = new MPDClient();
+};
