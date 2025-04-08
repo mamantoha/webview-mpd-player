@@ -16,6 +16,13 @@ Thread.new do
     puts "#{event}: #{value}"
 
     case event
+    when .elapsed?
+      if song = mpd.currentsong
+        if duration = song["Time"]?.try(&.to_i)
+          progress = (value.to_f / duration.to_f * 100).round.to_i
+          webview.eval("updateProgressBar(#{progress})")
+        end
+      end
     when .song?
       if song = mpd.currentsong
         title = "#{song["Artist"]} - #{song["Title"]}"

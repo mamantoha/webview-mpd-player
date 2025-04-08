@@ -20,6 +20,22 @@
         padding: 10px 20px;
         font-size: 1rem;
       }
+
+      #progress-bar {
+        width: 80%;
+        height: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        margin: 20px auto;
+        overflow: hidden;
+      }
+
+      #progress-bar-fill {
+        height: 100%;
+        background-color: #4CAF50;
+        width: 0%;
+        transition: width 0.1s linear;
+      }
     </style>
   </head>
   <body>
@@ -28,6 +44,10 @@
     <button onclick="prev()">⏮️</button>
     <button id="play-button" onclick="toggle()">▶️</button>
     <button onclick="next()">⏭️</button>
+
+    <div id="progress-bar">
+      <div id="progress-bar-fill"></div>
+    </div>
 
     <script>
       // On page load, show current song and play state
@@ -73,6 +93,11 @@
           const button = document.getElementById("play-button");
           button.innerText = state === "play" ? "⏸️" : "▶️";
         });
+      }
+
+      function updateProgressBar(progress) {
+        const progressBar = document.getElementById("progress-bar-fill");
+        progressBar.style.width = `${progress}%`;
       }
     </script>
   </body>
