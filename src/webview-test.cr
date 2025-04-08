@@ -5,6 +5,8 @@ require "crystal_mpd"
 def update_song_js(wv : Webview::Webview, title : String)
   escaped = title.gsub("\\", "\\\\").gsub("'", "\\'")
   wv.eval("updateSong('#{escaped}')")
+
+  wv.title = title
 end
 
 webview = Webview.window(640, 480, Webview::SizeHints::NONE, "MPD Controller", "file://#{__DIR__}/index.html")
@@ -106,6 +108,11 @@ webview.bind("set_song_position", Webview::JSProc.new { |a|
 
   JSON::Any.new("OK")
 })
+
+if song = client.currentsong
+  title = "#{song["Artist"]} - #{song["Title"]}"
+  webview.title = title
+end
 
 webview.run
 webview.destroy
