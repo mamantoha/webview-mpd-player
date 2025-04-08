@@ -50,7 +50,7 @@ end
 
 client = MPD::Client.new
 
-webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |a|
+webview.bind("mpdCallback.toggle_playback", Webview::JSProc.new { |a|
   puts "toggle_playback called with arguments: #{a}"
 
   client.pause
@@ -64,17 +64,17 @@ webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |a|
   JSON::Any.new(resp)
 })
 
-webview.bind("mpdClient.next_song", Webview::JSProc.new { |a|
+webview.bind("mpdCallback.next_song", Webview::JSProc.new { |a|
   client.next
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.prev_song", Webview::JSProc.new { |a|
+webview.bind("mpdCallback.prev_song", Webview::JSProc.new { |a|
   client.previous
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.current_song", Webview::JSProc.new { |a|
+webview.bind("mpdCallback.current_song", Webview::JSProc.new { |a|
   if song = client.currentsong
     title = "#{song["Artist"]} - #{song["Title"]}"
     JSON::Any.new(title)
@@ -83,7 +83,7 @@ webview.bind("mpdClient.current_song", Webview::JSProc.new { |a|
   end
 })
 
-webview.bind("mpdClient.get_playback_state", Webview::JSProc.new { |a|
+webview.bind("mpdCallback.get_playback_state", Webview::JSProc.new { |a|
   resp = ""
 
   client.status.try do |status|
@@ -93,7 +93,7 @@ webview.bind("mpdClient.get_playback_state", Webview::JSProc.new { |a|
   JSON::Any.new(resp)
 })
 
-webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |a|
+webview.bind("mpdCallback.get_current_position", Webview::JSProc.new { |a|
   if status = client.status
     if status["state"] == "stop"
       elapsed = total = 0.0
@@ -108,7 +108,7 @@ webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |a|
   end
 })
 
-webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
+webview.bind("mpdCallback.set_song_position", Webview::JSProc.new { |a|
   # a is Array(JSON::Any)
   # from 0 to 1
   relative = a.first.as_f

@@ -10,18 +10,18 @@ class MPDClient {
   }
 
   async updateSong() {
-    const song = await window['mpdClient.current_song']();
+    const song = await window['mpdCallback.current_song']();
     document.getElementById("current-song").innerText = song;
   }
 
   async updatePlayButton() {
-    const state = await window['mpdClient.get_playback_state']();
+    const state = await window['mpdCallback.get_playback_state']();
     const button = document.getElementById("play-button");
     button.innerText = state === "play" ? "⏸️" : "▶️";
   }
 
   async updateProgress() {
-    const position = await window['mpdClient.get_current_position']();
+    const position = await window['mpdCallback.get_current_position']();
     this.updateProgressBar(position);
   }
 
@@ -45,24 +45,24 @@ class MPDClient {
   }
 
   async toggle() {
-    const response = await window['mpdClient.toggle_playback']();
+    const response = await window['mpdCallback.toggle_playback']();
     console.log("Playback toggled:", response);
     await this.updatePlayButton();
     await this.updateSong();
   }
 
   async next() {
-    await window['mpdClient.next_song']();
+    await window['mpdCallback.next_song']();
     await this.updateSong();
   }
 
   async prev() {
-    await window['mpdClient.prev_song']();
+    await window['mpdCallback.prev_song']();
     await this.updateSong();
   }
 
   async seek(position) {
-    await window['mpdClient.set_song_position'](position);
+    await window['mpdCallback.set_song_position'](position);
   }
 }
 
