@@ -86,5 +86,26 @@ webview.bind("get_playback_state", Webview::JSProc.new { |a|
   JSON::Any.new(resp)
 })
 
+webview.bind("get_current_progress", Webview::JSProc.new { |a|
+  if song = client.currentsong
+    if duration = song["Time"]?.try(&.to_i)
+      if status = client.status
+        if elapsed = status["elapsed"]?.try(&.to_f)
+          progress = (elapsed / duration.to_f * 100).round.to_i
+          JSON::Any.new(progress)
+        else
+          JSON::Any.new(0)
+        end
+      else
+        JSON::Any.new(0)
+      end
+    else
+      JSON::Any.new(0)
+    end
+  else
+    JSON::Any.new(0)
+  end
+})
+
 webview.run
 webview.destroy

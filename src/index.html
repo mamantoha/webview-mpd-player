@@ -56,6 +56,9 @@
           updateSong(song);
         });
         updatePlayButton();
+        get_current_progress().then(function(progress) {
+          updateProgressBar(progress);
+        });
       }
 
       function toggle() {
