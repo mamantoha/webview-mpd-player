@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MPD Controller</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      #current-song {
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+      }
+
+      button {
+        margin: 5px;
+        padding: 10px 20px;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="current-song">Loading...</div>
+
+    <button onclick="prev()">⏮️ Prev</button>
+    <button onclick="toggle()">▶️ Play/Pause</button>
+    <button onclick="next()">⏭️ Next</button>
+
+    <script>
+      // On page load, show current song
+      window.onload = function() {
+        current_song().then(function(song) {
+          updateSong(song);
+        });
+      }
+
+      function toggle() {
+        toggle_playback().then(function (response) {
+          console.log("Playback toggled:", response);
+          current_song().then(function (song) {
+          });
+        });
+      }
+
+      function next() {
+        next_song().then(() => {});
+      }
+
+      function prev() {
+        prev_song().then(() => {});
+      }
+
+      function updateSong(text) {
+        document.getElementById("current-song").innerText = text;
+      }
+    </script>
+  </body>
+</html>

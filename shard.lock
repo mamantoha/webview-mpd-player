@@ -1,0 +1,10 @@
+version: 2.0
+shards:
+  crystal_mpd:
+    git: https://github.com/mamantoha/crystal_mpd.git
+    version: 1.0.0
+
+  webview:
+    git: https://github.com/naqvis/webview.git
+    version: 0.2.3
+

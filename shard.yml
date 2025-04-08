@@ -1,0 +1,19 @@
+name: webview-test
+version: 0.1.0
+
+authors:
+  - Anton Maminov <anton.linux@gmail.com>
+
+dependencies:
+  webview:
+    github: naqvis/webview
+  crystal_mpd:
+    github: mamantoha/crystal_mpd
+
+targets:
+  webview-test:
+    main: src/webview-test.cr
+
+crystal: '>= 1.16.0-dev'
+
+license: MIT
