@@ -5,7 +5,6 @@ require "crystal_mpd"
 def update_song_js(wv : Webview::Webview, title : String)
   escaped = title.gsub("\\", "\\\\").gsub("'", "\\'")
   wv.eval("window.mpdClient.updateSong('#{escaped}')")
-
   wv.title = title
 end
 
@@ -110,7 +109,8 @@ webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |a|
 })
 
 webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
-  relative = a.first.as_f
+  # from 0 to 1
+  relative = a.as_f
 
   if current_song = client.currentsong
     total = current_song["Time"].to_i
