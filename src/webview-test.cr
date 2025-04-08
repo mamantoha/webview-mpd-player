@@ -21,6 +21,13 @@ Thread.new do
         title = "#{song["Artist"]} - #{song["Title"]}"
         update_song_js(webview, title)
       end
+    when .state?
+      case value
+      when "play"
+        webview.eval("updatePlayButton('play')")
+      when "pause"
+        webview.eval("updatePlayButton('pause')")
+      end
     end
   end
 
@@ -34,7 +41,13 @@ webview.bind("toggle_playback", Webview::JSProc.new { |a|
 
   client.pause
 
-  JSON::Any.new("play")
+  resp = ""
+
+  client.status.try do |status|
+    resp = status["state"] == "play" ? "play" : "pause"
+  end
+
+  JSON::Any.new(resp)
 })
 
 webview.bind("next_song", Webview::JSProc.new { |a|
@@ -54,6 +67,16 @@ webview.bind("current_song", Webview::JSProc.new { |a|
   else
     JSON::Any.new("")
   end
+})
+
+webview.bind("get_playback_state", Webview::JSProc.new { |a|
+  resp = ""
+
+  client.status.try do |status|
+    resp = status["state"] == "play" ? "play" : "pause"
+  end
+
+  JSON::Any.new(resp)
 })
 
 webview.run
