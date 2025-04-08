@@ -8,12 +8,12 @@
   <body>
     <div id="current-song">Loading...</div>
 
-    <button onclick="window.mpdClient.prev()">⏮️</button>
-    <button id="play-button" onclick="window.mpdClient.toggle()">▶️</button>
-    <button onclick="window.mpdClient.next()">⏭️</button>
+    <button onclick="window.musicPlayer.prev()">⏮️</button>
+    <button id="play-button" onclick="window.musicPlayer.toggle()">▶️</button>
+    <button onclick="window.musicPlayer.next()">⏭️</button>
 
     <div id="progress-container">
-      <input type="range" id="progress-bar" min="0" max="100" value="0" oninput="window.mpdClient.seek(this.value / 100)">
+      <input type="range" id="progress-bar" min="0" max="100" value="0" oninput="window.musicPlayer.seek(this.value / 100)">
       <div id="time-display">
         <span id="current-time">0:00</span>
         <span id="total-time">0:00</span>

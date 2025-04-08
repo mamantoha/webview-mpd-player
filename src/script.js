@@ -1,4 +1,4 @@
-class MPDClient {
+class MusicPlayer {
   constructor() {
     this.initialize();
   }
@@ -68,5 +68,5 @@ class MPDClient {
 
 // Initialize the client when the page loads
 window.onload = function() {
-  window.mpdClient = new MPDClient();
+  window.musicPlayer = new MusicPlayer();
 };

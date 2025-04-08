@@ -4,7 +4,7 @@ require "crystal_mpd"
 # JS method to update song info from backend
 def update_song_js(wv : Webview::Webview, title : String)
   escaped = title.gsub("\\", "\\\\").gsub("'", "\\'")
-  wv.eval("window.mpdClient.updateSong('#{escaped}')")
+  wv.eval("window.musicPlayer.updateSong('#{escaped}')")
   wv.title = title
 end
 
@@ -28,7 +28,7 @@ Thread.new do
       if status = mpd.status
         elapsed = value.to_f
         total = status["duration"].to_f
-        webview.eval("window.mpdClient.updateProgressBar('#{elapsed}/#{total}')")
+        webview.eval("window.musicPlayer.updateProgressBar('#{elapsed}/#{total}')")
       end
     when .song?
       if song = mpd.currentsong
@@ -38,9 +38,9 @@ Thread.new do
     when .state?
       case value
       when "play"
-        webview.eval("window.mpdClient.updatePlayButton('play')")
+        webview.eval("window.musicPlayer.updatePlayButton('play')")
       when "pause"
-        webview.eval("window.mpdClient.updatePlayButton('pause')")
+        webview.eval("window.musicPlayer.updatePlayButton('pause')")
       end
     end
   end
