@@ -21,20 +21,45 @@
         font-size: 1rem;
       }
 
-      #progress-bar {
+      #progress-container {
         width: 80%;
-        height: 10px;
-        background-color: #f0f0f0;
-        border-radius: 5px;
         margin: 20px auto;
-        overflow: hidden;
       }
 
-      #progress-bar-fill {
-        height: 100%;
-        background-color: #4CAF50;
-        width: 0%;
-        transition: width 0.1s linear;
+      #progress-bar {
+        width: 100%;
+        height: 10px;
+        -webkit-appearance: none;
+        appearance: none;
+        background: #ddd;
+        border-radius: 5px;
+        outline: none;
+      }
+
+      #progress-bar::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+      }
+
+      #progress-bar::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+      }
+
+      #time-display {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+        font-size: 0.8rem;
+        color: #666;
       }
     </style>
   </head>
@@ -45,8 +70,12 @@
     <button id="play-button" onclick="toggle()">▶️</button>
     <button onclick="next()">⏭️</button>
 
-    <div id="progress-bar">
-      <div id="progress-bar-fill"></div>
+    <div id="progress-container">
+      <input type="range" id="progress-bar" min="0" max="100" value="0">
+      <div id="time-display">
+        <span id="current-time">0:00</span>
+        <span id="total-time">0:00</span>
+      </div>
     </div>
 
     <script>
@@ -56,9 +85,6 @@
           updateSong(song);
         });
         updatePlayButton();
-        get_current_progress().then(function(progress) {
-          updateProgressBar(progress);
-        });
       }
 
       function toggle() {
@@ -99,8 +125,22 @@
       }
 
       function updateProgressBar(progress) {
-        const progressBar = document.getElementById("progress-bar-fill");
-        progressBar.style.width = `${progress}%`;
+        const progressBar = document.getElementById("progress-bar");
+        const currentTime = document.getElementById("current-time");
+        const totalTime = document.getElementById("total-time");
+
+        const [elapsed, total] = progress.split('/').map(Number);
+        const progressPercent = (elapsed / total) * 100;
+
+        progressBar.value = progressPercent;
+        currentTime.textContent = formatTime(elapsed);
+        totalTime.textContent = formatTime(total);
+      }
+
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
       }
     </script>
   </body>

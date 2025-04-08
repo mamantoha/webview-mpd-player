@@ -17,11 +17,10 @@ Thread.new do
 
     case event
     when .elapsed?
-      if song = mpd.currentsong
-        if duration = song["Time"]?.try(&.to_i)
-          progress = (value.to_f / duration.to_f * 100).round.to_i
-          webview.eval("updateProgressBar(#{progress})")
-        end
+      if status = mpd.status
+        elapsed = value.to_f
+        total = status["duration"].to_f
+        webview.eval("updateProgressBar('#{elapsed}/#{total}')")
       end
     when .song?
       if song = mpd.currentsong
@@ -84,27 +83,6 @@ webview.bind("get_playback_state", Webview::JSProc.new { |a|
   end
 
   JSON::Any.new(resp)
-})
-
-webview.bind("get_current_progress", Webview::JSProc.new { |a|
-  if song = client.currentsong
-    if duration = song["Time"]?.try(&.to_i)
-      if status = client.status
-        if elapsed = status["elapsed"]?.try(&.to_f)
-          progress = (elapsed / duration.to_f * 100).round.to_i
-          JSON::Any.new(progress)
-        else
-          JSON::Any.new(0)
-        end
-      else
-        JSON::Any.new(0)
-      end
-    else
-      JSON::Any.new(0)
-    end
-  else
-    JSON::Any.new(0)
-  end
 })
 
 webview.run
