@@ -4,35 +4,9 @@ class MPDClient {
   }
 
   async initialize() {
-    // Wait for the bound functions to be available
-    await this.waitForFunctions();
     await this.updateSong();
     await this.updatePlayButton();
     await this.updateProgress();
-  }
-
-  async waitForFunctions() {
-    const requiredFunctions = [
-      'current_song',
-      'get_playback_state',
-      'get_current_position',
-      'toggle_playback',
-      'next_song',
-      'prev_song',
-      'set_song_position'
-    ];
-
-    return new Promise((resolve) => {
-      const checkFunctions = () => {
-        const allAvailable = requiredFunctions.every(func => typeof window[`mpdClient.${func}`] === 'function');
-        if (allAvailable) {
-          resolve();
-        } else {
-          setTimeout(checkFunctions, 100);
-        }
-      };
-      checkFunctions();
-    });
   }
 
   async updateSong() {
