@@ -109,8 +109,9 @@ webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |a|
 })
 
 webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
+  # a is Array(JSON::Any)
   # from 0 to 1
-  relative = a.as_f
+  relative = a.first.as_f
 
   if current_song = client.currentsong
     total = current_song["Time"].to_i
