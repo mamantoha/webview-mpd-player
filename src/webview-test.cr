@@ -10,8 +10,8 @@ def update_song_js(wv : Webview::Webview, title : String)
 end
 
 webview = Webview.window(
-  420,
-  840,
+  400,
+  680,
   Webview::SizeHints::FIXED,
   "MPD Controller",
   "file://#{__DIR__}/index.html",
