@@ -41,10 +41,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: min(4vw, 20px) 0;
-  max-height: 50vh;
-  aspect-ratio: 1;
-  margin: 0 auto;
-  width: min(100%, 500px);
+  min-height: 0;
 }
 
 .album-art img {
@@ -57,7 +54,7 @@ body {
 
 .song-info {
   text-align: center;
-  padding: min(4vw, 20px) 0;
+  padding: min(2vw, 10px) 0;
 }
 
 #current-song {
@@ -74,7 +71,7 @@ body {
 
 #progress-container {
   width: 100%;
-  padding: min(3vw, 15px) 0;
+  padding: min(2vw, 10px) 0;
 }
 
 #progress-bar {
@@ -115,7 +112,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: clamp(20px, 6vw, 30px);
-  padding: min(4vw, 20px) 0;
+  padding: min(2vw, 10px) 0;
 }
 
 .control-button {
@@ -155,7 +152,8 @@ body {
 .bottom-controls {
   display: flex;
   justify-content: space-between;
-  padding: min(3vw, 15px) min(5vw, 20px);
+  padding: min(2vw, 10px) min(5vw, 20px);
+  margin-top: auto;
 }
 
 .icon-button {
