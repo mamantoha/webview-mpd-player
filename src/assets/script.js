@@ -34,7 +34,8 @@ class MusicPlayer {
   async updatePlayButton() {
     const state = await window['mpdClient.get_playback_state']();
     const button = document.getElementById("play-button");
-    button.innerText = state === "play" ? "⏸️" : "▶️";
+    const icon = button.querySelector('i');
+    icon.className = state === "play" ? "fas fa-pause" : "fas fa-play";
   }
 
   async updateProgress() {
