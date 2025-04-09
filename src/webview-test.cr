@@ -2,7 +2,7 @@ require "base64"
 require "webview"
 require "crystal_mpd"
 
-# JS method to update song info from backend
+# JS method to update song info from the callback
 def update_song_js(wv : Webview::Webview, title : String)
   escaped = title.gsub("\\", "\\\\").gsub("'", "\\'")
   wv.eval("window.musicPlayer.updateSong('#{escaped}')")
