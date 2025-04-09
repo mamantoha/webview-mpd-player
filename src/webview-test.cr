@@ -91,8 +91,18 @@ webview.bind("mpdClient.prev_song", Webview::JSProc.new { |a|
 
 webview.bind("mpdClient.album_art", Webview::JSProc.new { |a|
   if current_song = client.currentsong
-    if response = client.albumart(current_song["file"])
-      data, binary = response
+    picture = client.readpicture(current_song["file"])
+
+    unless picture
+      begin
+        picture = client.albumart(current_song["file"])
+      rescue
+        nil
+      end
+    end
+
+    if picture
+      data, binary = picture
 
       data_type = data["type"]? ? data["type"] : "image/png"
 
