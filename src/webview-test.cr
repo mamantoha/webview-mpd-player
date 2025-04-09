@@ -91,14 +91,16 @@ webview.bind("mpdClient.prev_song", Webview::JSProc.new { |a|
 
 webview.bind("mpdClient.album_art", Webview::JSProc.new { |a|
   if current_song = client.currentsong
-    if response = client.readpicture(current_song["file"])
+    if response = client.albumart(current_song["file"])
       data, binary = response
+
+      data_type = data["type"]? ? data["type"] : "image/png"
 
       # Encode to base64
       base64_string = Base64.strict_encode(binary)
 
       # Create a data URI suitable for HTML img src
-      data_uri = "data:#{data["type"]};base64,#{base64_string}"
+      data_uri = "data:#{data_type};base64,#{base64_string}"
 
       JSON::Any.new(data_uri)
     else
