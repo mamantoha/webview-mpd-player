@@ -43,6 +43,12 @@ Thread.new do
       when "pause"
         webview.eval("window.musicPlayer.updatePlayButton('pause')")
       end
+    when .random?
+      webview.eval("window.musicPlayer.updateRandomButton('#{value}')")
+    when .repeat?
+      webview.eval("window.musicPlayer.updateRepeatButton('#{value}')")
+    when .single?
+      webview.eval("window.musicPlayer.updateSingleButton('#{value}')")
     end
   end
 
@@ -50,6 +56,14 @@ Thread.new do
 end
 
 client = MPD::Client.new
+
+webview.bind("mpdClient.status", Webview::JSProc.new { |a|
+  if status = client.status
+    JSON.parse(status.to_json)
+  else
+    JSON::Any.new(nil)
+  end
+})
 
 webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |a|
   puts "toggle_playback called with arguments: #{a}"
@@ -139,6 +153,24 @@ webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
     client.seekcur(time)
   end
 
+  JSON::Any.new("OK")
+})
+
+webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |a|
+  mode = a.first.as_s
+
+  client.status.try do |status|
+    state = status[mode] == "0"
+
+    case mode
+    when "random"
+      client.random(state)
+    when "repeat"
+      client.repeat(state)
+    when "single"
+      client.single(state)
+    end
+  end
   JSON::Any.new("OK")
 })
 

@@ -5,6 +5,7 @@ class MusicPlayer {
 
   async initialize() {
     await this.updateSong();
+    await this.updateStateButtons()
     await this.updatePlayButton();
     await this.updateProgress();
   }
@@ -21,6 +22,13 @@ class MusicPlayer {
     } else {
       document.getElementById("album-cover").src = "assets/default-album.png";
     }
+  }
+
+  async updateStateButtons() {
+    const status = await window['mpdClient.status']();
+    this.updateRandomButton(status.random);
+    this.updateRepeatButton(status.repeat);
+    this.updateSingleButton(status.single);
   }
 
   async updatePlayButton() {
@@ -44,6 +52,21 @@ class MusicPlayer {
     progressBar.value = progressPercent;
     currentTime.textContent = this.formatTime(elapsed);
     totalTime.textContent = this.formatTime(total);
+  }
+
+  updateRandomButton(state) {
+    const button = document.getElementById("random-button");
+    button.classList.toggle("active", state === "1");
+  }
+
+  updateRepeatButton(state) {
+    const button = document.getElementById("repeat-button");
+    button.classList.toggle("active", state === "1");
+  }
+
+  updateSingleButton(state) {
+    const button = document.getElementById("single-button");
+    button.classList.toggle("active", state === "1");
   }
 
   formatTime(seconds) {
@@ -71,6 +94,18 @@ class MusicPlayer {
 
   async seek(position) {
     await window['mpdClient.set_song_position'](position);
+  }
+
+  async toggleRandom() {
+    await window['mpdClient.toggle_mode']('random');
+  }
+
+  async toggleRepeat() {
+    await window['mpdClient.toggle_mode']('repeat');
+  }
+
+  async toggleSingle() {
+    await window['mpdClient.toggle_mode']('single');
   }
 }
 

@@ -45,8 +45,15 @@
 
       <div class="bottom-controls">
         <button class="icon-button"><i class="far fa-heart"></i></button>
-        <button class="icon-button"><i class="fas fa-random"></i></button>
-        <button class="icon-button"><i class="fas fa-redo"></i></button>
+        <button class="icon-button" id="random-button" title="Toggle Random" onclick="window.musicPlayer.toggleRandom()">
+          <i class="fas fa-shuffle"></i>
+        </button>
+        <button class="icon-button" id="repeat-button" title="Toggle Repeat" onclick="window.musicPlayer.toggleRepeat()">
+          <i class="fas fa-repeat"></i>
+        </button>
+        <button class="icon-button" id="single-button" title="Toggle Single" onclick="window.musicPlayer.toggleSingle()">
+          <i class="fas fa-1"></i>
+        </button>
         <button class="icon-button"><i class="fas fa-ellipsis-h"></i></button>
       </div>
     </div>

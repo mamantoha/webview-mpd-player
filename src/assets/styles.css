@@ -160,6 +160,10 @@ body {
   transition: color 0.2s;
 }
 
+.icon-button.active {
+  color: #ff3366;
+}
+
 .icon-button:hover {
   color: #ff3366;
 }
