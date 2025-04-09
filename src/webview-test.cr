@@ -9,9 +9,9 @@ def update_song_js(wv : Webview::Webview, title : String)
 end
 
 webview = Webview.window(
-  640,
-  480,
-  Webview::SizeHints::NONE,
+  420,
+  840,
+  Webview::SizeHints::FIXED,
   "MPD Controller",
   "file://#{__DIR__}/index.html",
   true
@@ -76,10 +76,9 @@ webview.bind("mpdClient.prev_song", Webview::JSProc.new { |a|
 
 webview.bind("mpdClient.current_song", Webview::JSProc.new { |a|
   if song = client.currentsong
-    title = "#{song["Artist"]} - #{song["Title"]}"
-    JSON::Any.new(title)
+    JSON.parse({"artist" => song["Artist"],"title" => song["Title"]}.to_json)
   else
-    JSON::Any.new("")
+    JSON.parse({"artist" => "", "title" => ""}.to_json)
   end
 })
 

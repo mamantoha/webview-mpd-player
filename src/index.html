@@ -2,21 +2,52 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MPD Controller</title>
     <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
   <body>
-    <div id="current-song">Loading...</div>
+    <div class="player-container">
+      <div class="top-bar">
+        <button class="icon-button"><i class="fas fa-bars"></i></button>
+        <button class="icon-button"><i class="fas fa-search"></i></button>
+      </div>
 
-    <button onclick="window.musicPlayer.prev()">⏮️</button>
-    <button id="play-button" onclick="window.musicPlayer.toggle()">▶️</button>
-    <button onclick="window.musicPlayer.next()">⏭️</button>
+      <div class="album-art">
+        <img id="album-cover" src="assets/default-album.png" alt="Album Cover">
+      </div>
 
-    <div id="progress-container">
-      <input type="range" id="progress-bar" min="0" max="100" value="0" oninput="window.musicPlayer.seek(this.value / 100)">
-      <div id="time-display">
-        <span id="current-time">0:00</span>
-        <span id="total-time">0:00</span>
+      <div class="song-info">
+        <h2 id="current-song">Loading...</h2>
+        <p id="artist-name">Unknown Artist</p>
+      </div>
+
+      <div id="progress-container">
+        <input type="range" id="progress-bar" min="0" max="100" value="0" oninput="window.musicPlayer.seek(this.value / 100)">
+        <div id="time-display">
+          <span id="current-time">0:00</span>
+          <span id="total-time">0:00</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="control-button" onclick="window.musicPlayer.prev()">
+          <i class="fas fa-backward"></i>
+        </button>
+        <button class="control-button play-button" id="play-button" onclick="window.musicPlayer.toggle()">
+          <i class="fas fa-play"></i>
+        </button>
+        <button class="control-button" onclick="window.musicPlayer.next()">
+          <i class="fas fa-forward"></i>
+        </button>
+      </div>
+
+      <div class="bottom-controls">
+        <button class="icon-button"><i class="far fa-heart"></i></button>
+        <button class="icon-button"><i class="fas fa-random"></i></button>
+        <button class="icon-button"><i class="fas fa-redo"></i></button>
+        <button class="icon-button"><i class="fas fa-ellipsis-h"></i></button>
       </div>
     </div>
 

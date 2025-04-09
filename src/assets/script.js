@@ -11,7 +11,8 @@ class MusicPlayer {
 
   async updateSong() {
     const song = await window['mpdClient.current_song']();
-    document.getElementById("current-song").innerText = song;
+    document.getElementById("current-song").innerText = song.title;
+    document.getElementById("artist-name").innerText = song.artist;
   }
 
   async updatePlayButton() {
