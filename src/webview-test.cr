@@ -1,3 +1,4 @@
+require "base64"
 require "webview"
 require "crystal_mpd"
 
@@ -72,6 +73,26 @@ webview.bind("mpdClient.next_song", Webview::JSProc.new { |a|
 webview.bind("mpdClient.prev_song", Webview::JSProc.new { |a|
   client.previous
   JSON::Any.new("OK")
+})
+
+webview.bind("mpdClient.album_art", Webview::JSProc.new { |a|
+  if current_song = client.currentsong
+    if response = client.readpicture(current_song["file"])
+      data, binary = response
+
+      # Encode to base64
+      base64_string = Base64.strict_encode(binary)
+
+      # Create a data URI suitable for HTML img src
+      data_uri = "data:#{data["type"]};base64,#{base64_string}"
+
+      JSON::Any.new(data_uri)
+    else
+      JSON::Any.new(nil)
+    end
+  else
+    JSON::Any.new(nil)
+  end
 })
 
 webview.bind("mpdClient.current_song", Webview::JSProc.new { |a|

@@ -13,6 +13,14 @@ class MusicPlayer {
     const song = await window['mpdClient.current_song']();
     document.getElementById("current-song").innerText = song.title;
     document.getElementById("artist-name").innerText = song.artist;
+
+    // Fetch and set album art
+    const albumArt = await window['mpdClient.album_art']();
+    if (albumArt) {
+      document.getElementById("album-cover").src = albumArt;
+    } else {
+      document.getElementById("album-cover").src = "assets/default-album.png";
+    }
   }
 
   async updatePlayButton() {
