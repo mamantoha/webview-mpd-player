@@ -21,16 +21,15 @@ class MusicPlayer {
   }
 
   async updateProgress() {
-    const position = await window['mpdClient.get_current_position']();
-    this.updateProgressBar(position);
+    const [elapsed, total] = await window['mpdClient.get_current_position']();
+    this.updateProgressBar(elapsed, total);
   }
 
-  updateProgressBar(progress) {
+  updateProgressBar(elapsed, total) {
     const progressBar = document.getElementById("progress-bar");
     const currentTime = document.getElementById("current-time");
     const totalTime = document.getElementById("total-time");
 
-    const [elapsed, total] = progress.split('/').map(Number);
     const progressPercent = (elapsed / total) * 100;
 
     progressBar.value = progressPercent;

@@ -28,7 +28,7 @@ Thread.new do
       if status = mpd.status
         elapsed = value.to_f
         total = status["duration"].to_f
-        webview.eval("window.musicPlayer.updateProgressBar('#{elapsed}/#{total}')")
+        webview.eval("window.musicPlayer.updateProgressBar(#{elapsed}, #{total})")
       end
     when .song?
       if song = mpd.currentsong
@@ -102,9 +102,9 @@ webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |a|
       total = status["duration"].to_f
     end
 
-    JSON::Any.new("#{elapsed}/#{total}")
+    JSON::Any.new([JSON::Any.new(elapsed), JSON::Any.new(total)])
   else
-    JSON::Any.new("0/0")
+    JSON::Any.new([JSON::Any.new(0), JSON::Any.new(0)])
   end
 })
 
