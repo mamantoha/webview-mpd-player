@@ -55,10 +55,10 @@ Thread.new do
   loop { sleep 0.1 }
 end
 
-client = MPD::Client.new
+mpd_client = MPD::Client.new
 
 webview.bind("mpdClient.status", Webview::JSProc.new { |a|
-  if status = client.status
+  if status = mpd_client.status
     JSON.parse(status.to_json)
   else
     JSON::Any.new(nil)
@@ -68,11 +68,11 @@ webview.bind("mpdClient.status", Webview::JSProc.new { |a|
 webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |a|
   puts "toggle_playback called with arguments: #{a}"
 
-  client.pause
+  mpd_client.pause
 
   resp = ""
 
-  client.status.try do |status|
+  mpd_client.status.try do |status|
     resp = status["state"] == "play" ? "play" : "pause"
   end
 
@@ -80,22 +80,22 @@ webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |a|
 })
 
 webview.bind("mpdClient.next_song", Webview::JSProc.new { |a|
-  client.next
+  mpd_client.next
   JSON::Any.new("OK")
 })
 
 webview.bind("mpdClient.prev_song", Webview::JSProc.new { |a|
-  client.previous
+  mpd_client.previous
   JSON::Any.new("OK")
 })
 
 webview.bind("mpdClient.album_art", Webview::JSProc.new { |a|
-  if current_song = client.currentsong
-    picture = client.readpicture(current_song["file"])
+  if current_song = mpd_client.currentsong
+    picture = mpd_client.readpicture(current_song["file"])
 
     unless picture
       begin
-        picture = client.albumart(current_song["file"])
+        picture = mpd_client.albumart(current_song["file"])
       rescue
         nil
       end
@@ -122,7 +122,7 @@ webview.bind("mpdClient.album_art", Webview::JSProc.new { |a|
 })
 
 webview.bind("mpdClient.current_song", Webview::JSProc.new { |a|
-  if song = client.currentsong
+  if song = mpd_client.currentsong
     JSON.parse({"artist" => song["Artist"],"title" => song["Title"]}.to_json)
   else
     JSON.parse({"artist" => "", "title" => ""}.to_json)
@@ -132,7 +132,7 @@ webview.bind("mpdClient.current_song", Webview::JSProc.new { |a|
 webview.bind("mpdClient.get_playback_state", Webview::JSProc.new { |a|
   resp = ""
 
-  client.status.try do |status|
+  mpd_client.status.try do |status|
     resp = status["state"] == "play" ? "play" : "pause"
   end
 
@@ -140,7 +140,7 @@ webview.bind("mpdClient.get_playback_state", Webview::JSProc.new { |a|
 })
 
 webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |a|
-  if status = client.status
+  if status = mpd_client.status
     if status["state"] == "stop"
       elapsed = total = 0.0
     else
@@ -159,10 +159,10 @@ webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
   # from 0 to 1
   relative = a.first.as_f
 
-  if current_song = client.currentsong
+  if current_song = mpd_client.currentsong
     total = current_song["Time"].to_i
     time = (total * relative).to_i
-    client.seekcur(time)
+    mpd_client.seekcur(time)
   end
 
   JSON::Any.new("OK")
@@ -171,22 +171,22 @@ webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
 webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |a|
   mode = a.first.as_s
 
-  client.status.try do |status|
+  mpd_client.status.try do |status|
     state = status[mode] == "0"
 
     case mode
     when "random"
-      client.random(state)
+      mpd_client.random(state)
     when "repeat"
-      client.repeat(state)
+      mpd_client.repeat(state)
     when "single"
-      client.single(state)
+      mpd_client.single(state)
     end
   end
   JSON::Any.new("OK")
 })
 
-if song = client.currentsong
+if song = mpd_client.currentsong
   title = "#{song["Artist"]} - #{song["Title"]}"
   webview.title = title
 end
