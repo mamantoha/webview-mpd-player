@@ -36,7 +36,7 @@ Thread.new do
       if song = mpd.currentsong
         title = "#{song["Artist"]} - #{song["Title"]}"
         update_song_js(webview, title)
-        webview.eval("window.musicPlayer.updatePlaylist()")
+        webview.eval("window.musicPlayer.scrollToSong(#{song["Id"]})")
       end
     when .playlist?
       webview.eval("window.musicPlayer.updatePlaylist()")

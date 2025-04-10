@@ -118,6 +118,18 @@ class MusicPlayer {
     return songs;
   }
 
+  async scrollToSong(songId) {
+    const item = document.querySelector(`.playlist-item[data-id="${songId}"]`);
+    if (item) {
+      item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      document.querySelectorAll('.playlist-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      item.classList.add('active');
+    }
+  }
+
   async updatePlaylist() {
     const playlistContent = document.querySelector('.playlist-content');
     const playlist = await this.getPlaylist();
@@ -129,6 +141,7 @@ class MusicPlayer {
     playlist.forEach((song, index) => {
       const item = document.createElement('div');
       item.className = `playlist-item ${song.active ? 'active' : ''}`;
+      item.setAttribute('data-id', song.id);
       item.innerHTML = `
         <span class="song-title">${song.title}</span>
         <span class="song-artist">${song.artist}</span>
@@ -137,12 +150,6 @@ class MusicPlayer {
       // Add click handler to play the song
       item.addEventListener('click', async () => {
         await window['mpdClient.playid'](song.id);
-
-        // Update visual state immediately
-        document.querySelectorAll('.playlist-item').forEach(item => {
-          item.classList.remove('active');
-        });
-        item.classList.add('active');
       });
 
       playlistContent.appendChild(item);
