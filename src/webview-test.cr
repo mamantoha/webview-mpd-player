@@ -176,6 +176,14 @@ webview.bind("mpdClient.playlist", Webview::JSProc.new { |a|
   JSON.parse(songs.to_json)
 })
 
+webview.bind("mpdClient.playid", Webview::JSProc.new { |a|
+  song_id = a.first.as_s.to_i
+
+  mpd_client.playid(song_id)
+
+  JSON::Any.new("OK")
+})
+
 webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
   # a is Array(JSON::Any)
   # from 0 to 1

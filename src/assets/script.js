@@ -133,6 +133,18 @@ class MusicPlayer {
         <span class="song-title">${song.title}</span>
         <span class="song-artist">${song.artist}</span>
       `;
+
+      // Add click handler to play the song
+      item.addEventListener('click', async () => {
+        await window['mpdClient.playid'](song.id);
+
+        // Update visual state immediately
+        document.querySelectorAll('.playlist-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        item.classList.add('active');
+      });
+
       playlistContent.appendChild(item);
 
       // Scroll to active song
