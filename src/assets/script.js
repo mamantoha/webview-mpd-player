@@ -2,6 +2,7 @@ class MusicPlayer {
   constructor() {
     this.initialize();
     this.setupPlaylistHandlers();
+    this.updatePlaylist(); // Initialize playlist with mock data
   }
 
   async initialize() {
@@ -110,12 +111,43 @@ class MusicPlayer {
     await window['mpdClient.toggle_mode']('single');
   }
 
+  // Mock playlist data
+  getMockPlaylist() {
+    return [
+      { title: "Current Playing Song", artist: "Artist Name", active: true },
+      { title: "Next Song", artist: "Another Artist", active: false },
+      { title: "Third Song", artist: "Different Artist", active: false },
+      { title: "Fourth Song", artist: "Yet Another Artist", active: false },
+      { title: "Fifth Song", artist: "One More Artist", active: false }
+    ];
+  }
+
+  updatePlaylist() {
+    const playlistContent = document.querySelector('.playlist-content');
+    const playlist = this.getMockPlaylist();
+
+    // Clear existing content
+    playlistContent.innerHTML = '';
+
+    // Add playlist items
+    playlist.forEach(song => {
+      const item = document.createElement('div');
+      item.className = `playlist-item ${song.active ? 'active' : ''}`;
+      item.innerHTML = `
+        <span class="song-title">${song.title}</span>
+        <span class="song-artist">${song.artist}</span>
+      `;
+      playlistContent.appendChild(item);
+    });
+  }
+
   setupPlaylistHandlers() {
     const playlistButton = document.getElementById('playlist-button');
     const closePlaylistButton = document.getElementById('close-playlist');
     const playlistOverlay = document.getElementById('playlist-overlay');
 
     playlistButton.addEventListener('click', () => {
+      this.updatePlaylist(); // Update playlist data before showing
       playlistOverlay.classList.add('visible');
     });
 
