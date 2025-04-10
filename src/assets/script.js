@@ -126,7 +126,7 @@ class MusicPlayer {
     playlistContent.innerHTML = '';
 
     // Add playlist items
-    playlist.forEach(song => {
+    playlist.forEach((song, index) => {
       const item = document.createElement('div');
       item.className = `playlist-item ${song.active ? 'active' : ''}`;
       item.innerHTML = `
@@ -134,6 +134,13 @@ class MusicPlayer {
         <span class="song-artist">${song.artist}</span>
       `;
       playlistContent.appendChild(item);
+
+      // Scroll to active song
+      if (song.active) {
+        setTimeout(() => {
+          item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
     });
   }
 
