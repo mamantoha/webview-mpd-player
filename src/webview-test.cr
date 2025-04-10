@@ -20,9 +20,10 @@ webview = Webview.window(
 
 Thread.new do
   mpd = MPD::Client.new(with_callbacks: true)
+  mpd.callbacks_timeout = 100.milliseconds
 
   mpd.on_callback do |event, value|
-    puts "#{event}: #{value}"
+    # puts "#{event}: #{value}"
 
     case event
     when .elapsed?
@@ -55,7 +56,7 @@ Thread.new do
     end
   end
 
-  loop { sleep 0.1 }
+  loop { sleep 1.second }
 end
 
 mpd_client = MPD::Client.new
