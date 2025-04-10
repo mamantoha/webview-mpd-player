@@ -111,20 +111,15 @@ class MusicPlayer {
     await window['mpdClient.toggle_mode']('single');
   }
 
-  // Mock playlist data
-  getMockPlaylist() {
-    return [
-      { title: "Current Playing Song", artist: "Artist Name", active: true },
-      { title: "Next Song", artist: "Another Artist", active: false },
-      { title: "Third Song", artist: "Different Artist", active: false },
-      { title: "Fourth Song", artist: "Yet Another Artist", active: false },
-      { title: "Fifth Song", artist: "One More Artist", active: false }
-    ];
+  async getPlaylist() {
+    const songs = await window['mpdClient.playlist']();
+
+    return songs;
   }
 
-  updatePlaylist() {
+  async updatePlaylist() {
     const playlistContent = document.querySelector('.playlist-content');
-    const playlist = this.getMockPlaylist();
+    const playlist = await this.getPlaylist();
 
     // Clear existing content
     playlistContent.innerHTML = '';
@@ -146,8 +141,8 @@ class MusicPlayer {
     const closePlaylistButton = document.getElementById('close-playlist');
     const playlistOverlay = document.getElementById('playlist-overlay');
 
-    playlistButton.addEventListener('click', () => {
-      this.updatePlaylist(); // Update playlist data before showing
+    playlistButton.addEventListener('click', async () => {
+      await this.updatePlaylist(); // Update playlist data before showing
       playlistOverlay.classList.add('visible');
     });
 
