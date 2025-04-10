@@ -9,10 +9,12 @@
   </head>
   <body>
     <div class="player-container">
-      <!-- <div class="top-bar">
-        <button class="icon-button"><i class="fas fa-bars"></i></button>
-        <button class="icon-button"><i class="fas fa-search"></i></button>
-      </div> -->
+      <div class="top-bar">
+        <button class="icon-button" id="playlist-button" title="Playlist">
+          <i class="fas fa-music"></i>
+        </button>
+        <!-- <button class="icon-button"><i class="fas fa-search"></i></button> -->
+      </div>
 
       <div class="album-art">
         <img id="album-cover" src="assets/default-album.png" alt="Album Cover">
@@ -55,6 +57,27 @@
           <i class="fas fa-1"></i>
         </button>
         <button class="icon-button" disabled><i class="fas fa-ellipsis-h"></i></button>
+      </div>
+    </div>
+
+    <div class="playlist-overlay" id="playlist-overlay">
+      <div class="playlist-header">
+        <h2>Playlist</h2>
+        <button class="icon-button" id="close-playlist"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="playlist-content">
+        <div class="playlist-item active">
+          <span class="song-title">Current Playing Song</span>
+          <span class="song-artist">Artist Name</span>
+        </div>
+        <div class="playlist-item">
+          <span class="song-title">Next Song</span>
+          <span class="song-artist">Another Artist</span>
+        </div>
+        <div class="playlist-item">
+          <span class="song-title">Third Song</span>
+          <span class="song-artist">Different Artist</span>
+        </div>
       </div>
     </div>
 

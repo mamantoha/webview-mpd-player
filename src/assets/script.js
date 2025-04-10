@@ -1,6 +1,7 @@
 class MusicPlayer {
   constructor() {
     this.initialize();
+    this.setupPlaylistHandlers();
   }
 
   async initialize() {
@@ -107,6 +108,20 @@ class MusicPlayer {
 
   async toggleSingle() {
     await window['mpdClient.toggle_mode']('single');
+  }
+
+  setupPlaylistHandlers() {
+    const playlistButton = document.getElementById('playlist-button');
+    const closePlaylistButton = document.getElementById('close-playlist');
+    const playlistOverlay = document.getElementById('playlist-overlay');
+
+    playlistButton.addEventListener('click', () => {
+      playlistOverlay.classList.add('visible');
+    });
+
+    closePlaylistButton.addEventListener('click', () => {
+      playlistOverlay.classList.remove('visible');
+    });
   }
 }
 

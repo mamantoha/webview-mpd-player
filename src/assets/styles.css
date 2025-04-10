@@ -204,3 +204,71 @@ body {
     box-shadow: none;
   }
 }
+
+.playlist-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #181818;
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-overlay.visible {
+  transform: translateX(0);
+}
+
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: min(5vw, 20px);
+  border-bottom: 1px solid #404040;
+}
+
+.playlist-header h2 {
+  font-size: clamp(20px, 6vw, 24px);
+  color: #fff;
+}
+
+.playlist-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: min(3vw, 15px);
+}
+
+.playlist-item {
+  display: flex;
+  flex-direction: column;
+  padding: min(3vw, 15px);
+  border-radius: 8px;
+  margin-bottom: min(2vw, 10px);
+  background: #282828;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.playlist-item:hover {
+  background: #404040;
+}
+
+.playlist-item.active {
+  background: #404040;
+  border-left: 4px solid #1db954;
+}
+
+.playlist-item .song-title {
+  font-size: clamp(14px, 4vw, 16px);
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.playlist-item .song-artist {
+  font-size: clamp(12px, 3vw, 14px);
+  color: #b3b3b3;
+}
