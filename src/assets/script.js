@@ -112,6 +112,7 @@ class MusicPlayer {
   }
 
   async getPlaylist() {
+    console.log("Getting playlist");
     const songs = await window['mpdClient.playlist']();
 
     return songs;
@@ -141,8 +142,7 @@ class MusicPlayer {
     const closePlaylistButton = document.getElementById('close-playlist');
     const playlistOverlay = document.getElementById('playlist-overlay');
 
-    playlistButton.addEventListener('click', async () => {
-      await this.updatePlaylist(); // Update playlist data before showing
+    playlistButton.addEventListener('click', () => {
       playlistOverlay.classList.add('visible');
     });
 
