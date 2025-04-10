@@ -156,6 +156,13 @@ class MusicPlayer {
 
       playlistContent.appendChild(item);
     });
+
+    // Find and update active song after playlist is populated
+    const activeSong = playlist.find(song => song.active);
+    if (activeSong) {
+      const activeIndex = playlist.indexOf(activeSong);
+      this.updateSongInPlaylist(activeIndex);
+    }
   }
 
   setupPlaylistHandlers() {
