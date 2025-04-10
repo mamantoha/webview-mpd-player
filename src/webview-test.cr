@@ -168,9 +168,11 @@ webview.bind("mpdClient.playlist", Webview::JSProc.new { |a|
 
   if data = mpd_client.playlistinfo
     data.each do |song|
+      # p! song
       songs << {
         "title" => song["Title"],
         "artist" => song["Artist"],
+        "time" => song["Time"],
         "active" => song["Id"] == current_song_id,
         "id" => song["Id"]
       }

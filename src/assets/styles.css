@@ -251,6 +251,7 @@ body {
   background: #282828;
   cursor: pointer;
   transition: all 0.2s;
+  position: relative;
 }
 
 .playlist-item:hover {
@@ -262,10 +263,19 @@ body {
   border-left: 4px solid #1db954;
 }
 
+.playlist-item .song-time {
+  position: absolute;
+  top: min(3vw, 15px);
+  right: min(3vw, 15px);
+  font-size: clamp(10px, 3vw, 12px);
+  color: #b3b3b3;
+}
+
 .playlist-item .song-title {
   font-size: clamp(14px, 4vw, 16px);
   color: #fff;
   margin-bottom: 4px;
+  padding-right: 60px; /* Make space for time */
 }
 
 .playlist-item .song-artist {

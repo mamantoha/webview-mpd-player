@@ -73,6 +73,7 @@ class MusicPlayer {
   }
 
   formatTime(seconds) {
+    if (!seconds) return '0:00';
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
@@ -147,6 +148,7 @@ class MusicPlayer {
       item.innerHTML = `
         <span class="song-title">${song.title}</span>
         <span class="song-artist">${song.artist}</span>
+        <span class="song-time">${this.formatTime(song.time)}</span>
       `;
 
       // Add click handler to play the song
