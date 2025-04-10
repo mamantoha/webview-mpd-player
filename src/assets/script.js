@@ -118,14 +118,16 @@ class MusicPlayer {
     return songs;
   }
 
-  async scrollToSong(songId) {
-    const item = document.querySelector(`.playlist-item[data-id="${songId}"]`);
+  updateSongInPlaylist(position) {
+    const item = document.querySelector(`.playlist-item[data-pos="${position}"]`);
+
     if (item) {
       item.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
       document.querySelectorAll('.playlist-item').forEach(item => {
         item.classList.remove('active');
       });
+
       item.classList.add('active');
     }
   }
@@ -141,7 +143,7 @@ class MusicPlayer {
     playlist.forEach((song, index) => {
       const item = document.createElement('div');
       item.className = `playlist-item ${song.active ? 'active' : ''}`;
-      item.setAttribute('data-id', song.id);
+      item.setAttribute('data-pos', index);
       item.innerHTML = `
         <span class="song-title">${song.title}</span>
         <span class="song-artist">${song.artist}</span>
@@ -149,17 +151,10 @@ class MusicPlayer {
 
       // Add click handler to play the song
       item.addEventListener('click', async () => {
-        await window['mpdClient.playid'](song.id);
+        await window['mpdClient.play'](index);
       });
 
       playlistContent.appendChild(item);
-
-      // Scroll to active song
-      if (song.active) {
-        setTimeout(() => {
-          item.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
-      }
     });
   }
 
