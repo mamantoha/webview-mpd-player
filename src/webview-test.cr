@@ -157,9 +157,16 @@ webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |a|
 webview.bind("mpdClient.playlist", Webview::JSProc.new { |a|
   songs = [] of Hash(String, String | Bool)
 
+  current_song_id = mpd_client.currentsong.try { |song| song["Id"] } || nil
+
   if data = mpd_client.playlistinfo
     data.each do |song|
-      songs << {"title" => song["Title"], "artist" => song["Artist"], "active" => false}
+      songs << {
+        "title" => song["Title"],
+        "artist" => song["Artist"],
+        "active" => song["Id"] == current_song_id,
+        "id" => song["Id"]
+      }
     end
   end
 
