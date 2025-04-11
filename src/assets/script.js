@@ -83,17 +83,14 @@ class MusicPlayer {
     const response = await window['mpdClient.toggle_playback']();
     console.log("Playback toggled:", response);
     await this.updatePlayButton();
-    await this.updateSong();
   }
 
   async next() {
     await window['mpdClient.next_song']();
-    await this.updateSong();
   }
 
   async prev() {
     await window['mpdClient.prev_song']();
-    await this.updateSong();
   }
 
   async seek(position) {
