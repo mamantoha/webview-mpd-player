@@ -2,7 +2,7 @@ name: webview-test
 version: 0.1.0
 
 authors:
-  - Anton Maminov <anton.linux@gmail.com>
+  - Anton Maminov <anton.maminov@gmail.com>
 
 dependencies:
   webview:
@@ -11,8 +11,8 @@ dependencies:
     github: mamantoha/crystal_mpd
 
 targets:
-  webview-test:
-    main: src/webview-test.cr
+  mpd-player:
+    main: src/main.cr
 
 crystal: '>= 1.16.0-dev'
 
