@@ -2,17 +2,6 @@ require "base64"
 require "webview"
 require "crystal_mpd"
 
-# JS method to update song info from the callback
-def update_song_js(wv : Webview::Webview, song : Hash(String, String | Bool))
-  title = "#{song["Artist"]} - #{song["Title"]}"
-  escaped = title.gsub("\\", "\\\\").gsub("'", "\\'")
-
-  wv.eval("window.musicPlayer.updateSong()")
-  wv.eval("window.musicPlayer.updateSongInPlaylist(#{song["Pos"]})")
-
-  wv.title = title
-end
-
 webview = Webview.window(
   400,
   680,
@@ -38,7 +27,13 @@ Thread.new do
       end
     when .song?
       if song = mpd.currentsong
-        update_song_js(webview, song)
+        title = "#{song["Artist"]} - #{song["Title"]}"
+        escaped = title.gsub("\\", "\\\\").gsub("'", "\\'")
+
+        webview.eval("window.musicPlayer.updateSong()")
+        webview.eval("window.musicPlayer.updateSongInPlaylist(#{song["Pos"]})")
+
+        webview.title = title
       end
     when .playlist?
       webview.eval("window.musicPlayer.updatePlaylist()")
@@ -129,7 +124,7 @@ webview.bind("mpdClient.album_art", Webview::JSProc.new { |a|
 
 webview.bind("mpdClient.current_song", Webview::JSProc.new { |a|
   if song = mpd_client.currentsong
-    JSON.parse({"artist" => song["Artist"],"title" => song["Title"]}.to_json)
+    JSON.parse({"artist" => song["Artist"], "title" => song["Title"]}.to_json)
   else
     JSON.parse({"artist" => "", "title" => ""}.to_json)
   end
@@ -169,11 +164,11 @@ webview.bind("mpdClient.playlist", Webview::JSProc.new { |a|
     data.each do |song|
       # p! song
       songs << {
-        "title" => song["Title"],
+        "title"  => song["Title"],
         "artist" => song["Artist"],
-        "time" => song["Time"],
+        "time"   => song["Time"],
         "active" => song["Id"] == current_song_id,
-        "id" => song["Id"]
+        "id"     => song["Id"],
       }
     end
   end
