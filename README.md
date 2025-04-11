@@ -1,22 +1,32 @@
-# webview-test
+# webview-mpd-player
 
-TODO: Write a description here
+A lightweight MPD (Music Player Daemon) client built with Crystal and Webview. Features a web-based interface for controlling MPD playback, managing playlists, and displaying album artwork.
+
+This application serves as a demonstration of building real-time applications using Crystal and Webview. It showcases how to create responsive desktop applications that can handle live updates and user interactions while maintaining a lightweight footprint. The integration with MPD provides a practical example of managing real-time events, state synchronization, and UI updates in a Crystal-based desktop application.
+
 
 ## Installation
 
-TODO: Write installation instructions here
+1. Clone the repository:
+   ```bash
+   git clone git@github.com:mamantoha/webview-mpd-player.git
+   cd webview-mpd-player
+   ```
 
-## Usage
+2. Install dependencies:
+   - Crystal (>= 1.16.0)
+   - MPD (Music Player Daemon)
+   - pkg-config
+   - WebKit2GTK development files
 
-TODO: Write usage instructions here
-
-## Development
-
-TODO: Write development instructions here
+3. Build the application:
+   ```bash
+   shards install
+   shards build
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/webview-test/fork>)
+1. Fork it (<https://github.com/mamantoha/webview-mpd-player/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -24,4 +34,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [Anton Maminov](https://github.com/your-github-user) - creator and maintainer
+- [Anton Maminov](https://github.com/mamantoha) - creator and maintainer
