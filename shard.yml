@@ -1,4 +1,4 @@
-name: webview-test
+name: webview-mpd-player
 version: 0.1.0
 
 authors:
@@ -14,6 +14,6 @@ targets:
   mpd-player:
     main: src/main.cr
 
-crystal: '>= 1.16.0-dev'
+crystal: '>= 1.15.0'
 
 license: MIT

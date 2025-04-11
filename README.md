@@ -14,7 +14,7 @@ This application serves as a demonstration of building real-time applications us
    ```
 
 2. Install dependencies:
-   - Crystal (>= 1.16.0)
+   - Crystal (>= 1.15.0)
    - MPD (Music Player Daemon)
    - pkg-config
    - WebKit2GTK development files
