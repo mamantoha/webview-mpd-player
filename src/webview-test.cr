@@ -38,7 +38,6 @@ Thread.new do
       end
     when .song?
       if song = mpd.currentsong
-        title = "#{song["Artist"]} - #{song["Title"]}"
         update_song_js(webview, song)
       end
     when .playlist?
