@@ -7,7 +7,7 @@ def update_song_js(wv : Webview::Webview, song : Hash(String, String | Bool))
   title = "#{song["Artist"]} - #{song["Title"]}"
   escaped = title.gsub("\\", "\\\\").gsub("'", "\\'")
 
-  wv.eval("window.musicPlayer.updateSong('#{escaped}')")
+  wv.eval("window.musicPlayer.updateSong()")
   wv.eval("window.musicPlayer.updateSongInPlaylist(#{song["Pos"]})")
 
   wv.title = title
