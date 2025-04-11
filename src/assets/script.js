@@ -2,7 +2,7 @@ class MusicPlayer {
   constructor() {
     this.initialize();
     this.setupPlaylistHandlers();
-    this.updatePlaylist(); // Initialize playlist with mock data
+    this.updatePlaylist();
   }
 
   async initialize() {
