@@ -1,2 +1,2 @@
 require "spec"
-require "../src/webview-test"
+require "../src/main"
