@@ -189,8 +189,7 @@ body {
 }
 
 .icon-button:hover {
-  color: #1db954;
-  transform: scale(1.1);
+  transform: scale(1.3);
 }
 
 .icon-button.active {
