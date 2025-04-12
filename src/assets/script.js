@@ -1,5 +1,6 @@
 class MusicPlayer {
   constructor() {
+    this.isDragging = false;
     this.initialize();
     this.setupPlaylistHandlers();
     this.updatePlaylist();
@@ -46,6 +47,8 @@ class MusicPlayer {
   }
 
   updateProgressBar(elapsed, total) {
+    if (this.isDragging) return; // Don't update while user is dragging
+
     const progressBar = document.getElementById("progress-bar");
     const currentTime = document.getElementById("current-time");
     const totalTime = document.getElementById("total-time");
@@ -55,6 +58,29 @@ class MusicPlayer {
     progressBar.value = progressPercent;
     currentTime.textContent = this.formatTime(elapsed);
     totalTime.textContent = this.formatTime(total);
+  }
+
+  handleProgressInput(position) {
+    // This runs while the user is dragging
+    this.isDragging = true;
+
+    const currentTime = document.getElementById("current-time");
+    const totalTime = document.getElementById("total-time");
+    const total = parseFloat(totalTime.textContent.split(':').reduce((acc, time) => (60 * acc) + +time));
+
+    // Update the time display while dragging
+    const newTime = total * position;
+    currentTime.textContent = this.formatTime(newTime);
+  }
+
+  async handleProgressChange(position) {
+    // This runs when the user releases the slider
+    await window['mpdClient.set_song_position'](position);
+
+    // Add a small delay before allowing updates again
+    setTimeout(() => {
+      this.isDragging = false;
+    }, 100);
   }
 
   updateRandomButton(state) {
@@ -94,7 +120,12 @@ class MusicPlayer {
   }
 
   async seek(position) {
-    await window["mpdClient.set_song_position"](position);
+    this.isDragging = true;
+    await window['mpdClient.set_song_position'](position);
+    // Add a small delay before allowing updates again
+    setTimeout(() => {
+      this.isDragging = false;
+    }, 100);
   }
 
   async toggleRandom() {

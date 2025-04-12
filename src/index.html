@@ -26,7 +26,9 @@
       </div>
 
       <div id="progress-container">
-        <input type="range" id="progress-bar" min="0" max="100" value="0" oninput="window.musicPlayer.seek(this.value / 100)">
+        <input type="range" id="progress-bar" min="0" max="100" value="0"
+          oninput="window.musicPlayer.handleProgressInput(this.value / 100)"
+          onchange="window.musicPlayer.handleProgressChange(this.value / 100)">
         <div id="time-display">
           <span id="current-time">0:00</span>
           <span id="total-time">0:00</span>
