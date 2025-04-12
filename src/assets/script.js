@@ -120,12 +120,7 @@ class MusicPlayer {
   }
 
   async seek(position) {
-    this.isDragging = true;
     await window['mpdClient.set_song_position'](position);
-    // Add a small delay before allowing updates again
-    setTimeout(() => {
-      this.isDragging = false;
-    }, 100);
   }
 
   async toggleRandom() {
