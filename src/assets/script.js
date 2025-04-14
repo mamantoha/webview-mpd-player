@@ -194,17 +194,15 @@ class MusicPlayer {
         }
       });
 
-      playlistContent.appendChild(item);
-    });
-
-    // Add delete button handlers
-    document.querySelectorAll('.delete-song').forEach(button => {
-      button.addEventListener('click', async (e) => {
+      // Add delete button handler
+      const deleteButton = item.querySelector('.delete-song');
+      deleteButton.addEventListener('click', async (e) => {
         e.stopPropagation();
-        const pos = parseInt(button.dataset.pos);
-        await window["mpdClient.delete"](pos);
+        await window["mpdClient.delete"](index);
         await this.updatePlaylist();
       });
+
+      playlistContent.appendChild(item);
     });
 
     // Find and update active song after playlist is populated
