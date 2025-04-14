@@ -212,7 +212,6 @@ class MusicPlayer {
       deleteButton.addEventListener('click', async (e) => {
         e.stopPropagation();
         await window["mpdClient.delete"](index);
-        await this.updatePlaylist();
       });
 
       // Add click handler to play the song
