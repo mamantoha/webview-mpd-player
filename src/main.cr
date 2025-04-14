@@ -217,10 +217,51 @@ webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |a|
 })
 
 webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
-  file_path = File.join(__DIR__, "assets", "library-data.json")
-  if File.exists?(file_path)
-    content = File.read(file_path)
-    JSON.parse(content)
+  # Get all songs from MPD
+  if all_items = mpd_client.listallinfo
+    songs = all_items.select { |item| item["file"]? }
+
+    # First, group songs by artist and album
+    grouped_songs = {} of String => Hash(String, Array(Hash(String, String | Int32)))
+
+    songs.each do |song|
+      next unless song["Artist"]? && song["Album"]? && song["Title"]?
+
+      artist = song["Artist"]
+      album = song["Album"]
+
+      grouped_songs[artist] ||= {} of String => Array(Hash(String, String | Int32))
+      grouped_songs[artist][album] ||= [] of Hash(String, String | Int32)
+
+      grouped_songs[artist][album] << {
+        "title"    => song["Title"],
+        "duration" => (song["duration"]? || song["Time"]? || "0").to_f.to_i,
+        "url"      => song["file"],
+        "date"     => song["Date"]? || "Unknown",
+      }
+    end
+
+    library_data = {
+      "artists" => grouped_songs.keys.map do |artist_name|
+        albums = grouped_songs[artist_name]
+
+        albums_data = albums.map do |album_name, songs|
+          {
+            "name"  => album_name,
+            "year"  => songs.first["date"],
+            "songs" => songs,
+          }
+        end
+
+        # Create artist entry
+        {
+          "name"   => artist_name,
+          "albums" => albums_data,
+        }
+      end,
+    }
+
+    JSON.parse(library_data.to_json)
   else
     JSON::Any.new(nil)
   end

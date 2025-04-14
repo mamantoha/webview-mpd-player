@@ -1,13 +1,13 @@
 class Library {
   constructor() {
-    this.mockData = null;
+    this.data = null;
     this.loadData();
   }
 
   async loadData() {
     try {
-      this.mockData = await window['mpdClient.loadLibraryData']();
-      if (!this.mockData) {
+      this.data = await window['mpdClient.loadLibraryData']();
+      if (!this.data) {
         throw new Error('Failed to load library data');
       }
       this.initialize();
@@ -17,7 +17,7 @@ class Library {
   }
 
   initialize() {
-    if (!this.mockData) return;
+    if (!this.data) return;
     this.renderLibrary();
     this.setupEventListeners();
   }
@@ -27,7 +27,7 @@ class Library {
     const treeView = document.createElement('ul');
     treeView.className = 'tree-view';
 
-    this.mockData.artists.forEach(artist => {
+    this.data.artists.forEach(artist => {
       const artistItem = this.createArtistItem(artist);
       treeView.appendChild(artistItem);
     });
@@ -163,7 +163,7 @@ class Library {
 
   findSongUrls(songTitles) {
     const urls = [];
-    this.mockData.artists.forEach(artist => {
+    this.data.artists.forEach(artist => {
       artist.albums.forEach(album => {
         album.songs.forEach(song => {
           if (songTitles.includes(song.title)) {
@@ -177,7 +177,7 @@ class Library {
 
   findAlbumSongUrls(albumName) {
     const urls = [];
-    this.mockData.artists.forEach(artist => {
+    this.data.artists.forEach(artist => {
       artist.albums.forEach(album => {
         if (album.name === albumName) {
           album.songs.forEach(song => {
@@ -191,7 +191,7 @@ class Library {
 
   findArtistSongUrls(artistName) {
     const urls = [];
-    this.mockData.artists.forEach(artist => {
+    this.data.artists.forEach(artist => {
       if (artist.name === artistName) {
         artist.albums.forEach(album => {
           album.songs.forEach(song => {
