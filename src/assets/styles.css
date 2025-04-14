@@ -14,6 +14,10 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background: #121212;
   color: #fff;
+}
+
+/* Player specific layout */
+body.player-layout {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -280,4 +284,134 @@ body {
 .playlist-item .song-artist {
   font-size: clamp(12px, 3vw, 14px);
   color: #b3b3b3;
+}
+
+/* Library Styles */
+.library-container {
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background: #2F3439;
+}
+
+.tree-view {
+  list-style: none;
+  padding-left: 0;
+}
+
+.tree-item {
+  margin: 5px 0;
+}
+
+.tree-header {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  justify-content: space-between;
+}
+
+.tree-header-content {
+  display: flex;
+  align-items: center;
+}
+
+.tree-header:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.tree-content {
+  padding-left: 20px;
+  display: none;
+}
+
+.tree-content.expanded {
+  display: block;
+}
+
+.tree-toggle {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.song-item {
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.song-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.song-item.active {
+  background: #404040;
+  border-left: 4px solid #1db954;
+}
+
+.song-item .song-time {
+  position: absolute;
+  top: min(3vw, 15px);
+  right: min(3vw, 15px);
+  font-size: clamp(10px, 3vw, 12px);
+  color: #b3b3b3;
+}
+
+.song-item .song-title {
+  font-size: clamp(14px, 4vw, 16px);
+  color: #fff;
+  margin-bottom: 4px;
+  padding-right: 60px; /* Make space for time */
+}
+
+.song-item .song-artist {
+  font-size: clamp(12px, 3vw, 14px);
+  color: #b3b3b3;
+}
+
+.add-to-playlist {
+  background: none;
+  border: none;
+  color: #1db954;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.tree-header:hover .add-to-playlist,
+.song-item:hover .add-to-playlist {
+  opacity: 1;
+}
+
+.add-to-playlist:hover {
+  background-color: rgba(29, 185, 84, 0.1);
+}
+
+.song-item-content {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.back-button {
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #444;
 }

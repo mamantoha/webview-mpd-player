@@ -216,6 +216,16 @@ webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |a|
   JSON::Any.new("OK")
 })
 
+webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
+  file_path = File.join(__DIR__, "assets", "library-data.json")
+  if File.exists?(file_path)
+    content = File.read(file_path)
+    JSON.parse(content)
+  else
+    JSON::Any.new(nil)
+  end
+})
+
 if song = mpd_client.currentsong
   title = "#{song["Artist"]} - #{song["Title"]}"
   webview.title = title
