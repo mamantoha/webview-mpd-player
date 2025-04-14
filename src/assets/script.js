@@ -59,6 +59,7 @@ class MusicPlayer {
     progressBar.value = progressPercent;
     currentTime.textContent = this.formatTime(elapsed);
     totalTime.textContent = this.formatTime(total);
+    totalTime.dataset.totalSeconds = total.toString();
   }
 
   handleProgressInput(position) {
@@ -67,7 +68,7 @@ class MusicPlayer {
 
     const currentTime = document.getElementById("current-time");
     const totalTime = document.getElementById("total-time");
-    const total = parseFloat(totalTime.textContent.split(':').reduce((acc, time) => (60 * acc) + +time));
+    const total = parseFloat(totalTime.dataset.totalSeconds);
 
     // Update the time display while dragging
     const newTime = total * position;
@@ -171,6 +172,9 @@ class MusicPlayer {
       const item = document.createElement("div");
       item.className = `playlist-item ${song.active ? "active" : ""}`;
       item.setAttribute("data-pos", index);
+      item.setAttribute("data-title", song.title);
+      item.setAttribute("data-artist", song.artist);
+      item.setAttribute("data-time", song.time);
       item.innerHTML = `
         <span class="song-title">${song.title}</span>
         <span class="song-artist">${song.artist}</span>
