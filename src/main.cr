@@ -238,9 +238,9 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
       grouped_songs[artist][album] ||= [] of Hash(String, String | Int32)
 
       grouped_songs[artist][album] << {
-        "title" => song["Title"],
+        "title"    => song["Title"],
         "duration" => (song["duration"]? || song["Time"]? || "0").to_f.to_i,
-        "url" => song["file"]
+        "url"      => song["file"],
       }
     end
 
@@ -250,17 +250,17 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
 
         albums_data = albums.map do |album_name, songs|
           {
-            "name" => album_name,
-            "year" => (songs.first["Date"]? || "Unknown").to_s,
-            "songs" => songs
+            "name"  => album_name,
+            "year"  => (songs.first["Date"]? || "Unknown").to_s,
+            "songs" => songs,
           }
         end
 
         {
-          "name" => artist_name,
-          "albums" => albums_data
+          "name"   => artist_name,
+          "albums" => albums_data,
         }
-      end
+      end,
     }
 
     # Save to file

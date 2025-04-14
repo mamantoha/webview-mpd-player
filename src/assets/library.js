@@ -14,6 +14,10 @@ class Library {
       if (!this.data) {
         throw new Error('Failed to load library data');
       }
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
+      }
       this.initialize();
     } catch (error) {
       console.error('Error loading library data:', error);
@@ -40,11 +44,21 @@ class Library {
 
   renderLibrary() {
     const libraryContent = document.getElementById('library-content');
+    if (!libraryContent) {
+      console.error('Library content element not found');
+      return;
+    }
+
     // Clear existing content
     libraryContent.innerHTML = '';
 
     const treeView = document.createElement('ul');
     treeView.className = 'tree-view';
+
+    if (!this.data?.artists) {
+      console.error('No library data available');
+      return;
+    }
 
     this.data.artists.forEach(artist => {
       const artistItem = this.createArtistItem(artist);
@@ -240,7 +254,5 @@ class Library {
   }
 }
 
-// Initialize the library when the page loads
-window.onload = function() {
-  window.library = new Library();
-};
+// Export the Library class
+window.Library = Library;
