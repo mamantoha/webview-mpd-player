@@ -74,24 +74,47 @@ class Library {
 
     const header = document.createElement('div');
     header.className = 'tree-header';
-    header.innerHTML = `
-      <div class="tree-header-content">
-        <span class="tree-toggle">▶</span>
-        <span>${artist.name}</span>
-      </div>
-      <button class="add-to-playlist" title="Add all songs to playlist" data-urls='${JSON.stringify(this.getArtistUrls(artist))}'>
-        <i class="fas fa-plus"></i>
-      </button>
-    `;
 
+    // Create header content
+    const headerContent = document.createElement('div');
+    headerContent.className = 'tree-header-content';
+
+    // Create toggle span
+    const toggle = document.createElement('span');
+    toggle.className = 'tree-toggle';
+    toggle.textContent = '▶';
+    headerContent.appendChild(toggle);
+
+    // Create artist name span
+    const artistName = document.createElement('span');
+    artistName.textContent = artist.name;
+    headerContent.appendChild(artistName);
+
+    // Create add to playlist button
+    const addButton = document.createElement('button');
+    addButton.className = 'add-to-playlist';
+    addButton.title = 'Add all songs to playlist';
+    addButton.setAttribute('data-urls', JSON.stringify(this.getArtistUrls(artist)));
+
+    const addIcon = document.createElement('i');
+    addIcon.className = 'fas fa-plus';
+    addButton.appendChild(addIcon);
+
+    // Assemble header
+    header.appendChild(headerContent);
+    header.appendChild(addButton);
+
+    // Create content container
     const content = document.createElement('div');
     content.className = 'tree-content';
 
+    // Add albums
     artist.albums.forEach(album => {
       const albumItem = this.createAlbumItem(album, artist.name);
       content.appendChild(albumItem);
     });
 
+    // Assemble item
     item.appendChild(header);
     item.appendChild(content);
 
@@ -104,24 +127,47 @@ class Library {
 
     const header = document.createElement('div');
     header.className = 'tree-header';
-    header.innerHTML = `
-      <div class="tree-header-content">
-        <span class="tree-toggle">▶</span>
-        <span>${album.name} (${album.year})</span>
-      </div>
-      <button class="add-to-playlist" title="Add album to playlist" data-urls='${JSON.stringify(this.getAlbumUrls(album))}'>
-        <i class="fas fa-plus"></i>
-      </button>
-    `;
 
+    // Create header content
+    const headerContent = document.createElement('div');
+    headerContent.className = 'tree-header-content';
+
+    // Create toggle span
+    const toggle = document.createElement('span');
+    toggle.className = 'tree-toggle';
+    toggle.textContent = '▶';
+    headerContent.appendChild(toggle);
+
+    // Create album name span
+    const albumName = document.createElement('span');
+    albumName.textContent = `${album.name} (${album.year})`;
+    headerContent.appendChild(albumName);
+
+    // Create add to playlist button
+    const addButton = document.createElement('button');
+    addButton.className = 'add-to-playlist';
+    addButton.title = 'Add album to playlist';
+    addButton.setAttribute('data-urls', JSON.stringify(this.getAlbumUrls(album)));
+
+    const addIcon = document.createElement('i');
+    addIcon.className = 'fas fa-plus';
+    addButton.appendChild(addIcon);
+
+    // Assemble header
+    header.appendChild(headerContent);
+    header.appendChild(addButton);
+
+    // Create content container
     const content = document.createElement('div');
     content.className = 'tree-content';
 
+    // Add songs
     album.songs.forEach(song => {
       const songItem = this.createSongItem(song);
       content.appendChild(songItem);
     });
 
+    // Assemble item
     item.appendChild(header);
     item.appendChild(content);
 
@@ -131,15 +177,35 @@ class Library {
   createSongItem(song) {
     const item = document.createElement('div');
     item.className = 'song-item';
-    item.innerHTML = `
-      <div class="song-item-content">
-        <span>${song.title}</span>
-        <span style="color: #b3b3b3">${this.formatDuration(song.duration)}</span>
-      </div>
-      <button class="add-to-playlist" title="Add song to playlist" data-urls='${JSON.stringify([song.url])}'>
-        <i class="fas fa-plus"></i>
-      </button>
-    `;
+
+    // Create song info container
+    const songInfo = document.createElement('div');
+    songInfo.className = 'song-item-content';
+
+    // Create title span
+    const title = document.createElement('span');
+    title.textContent = song.title;
+    songInfo.appendChild(title);
+
+    // Create duration span
+    const duration = document.createElement('span');
+    duration.style.color = '#b3b3b3';
+    duration.textContent = this.formatDuration(song.duration);
+    songInfo.appendChild(duration);
+
+    // Create add to playlist button
+    const addButton = document.createElement('button');
+    addButton.className = 'add-to-playlist';
+    addButton.title = 'Add song to playlist';
+    addButton.setAttribute('data-urls', JSON.stringify([song.url]));
+
+    const addIcon = document.createElement('i');
+    addIcon.className = 'fas fa-plus';
+    addButton.appendChild(addIcon);
+
+    // Assemble item
+    item.appendChild(songInfo);
+    item.appendChild(addButton);
 
     return item;
   }
