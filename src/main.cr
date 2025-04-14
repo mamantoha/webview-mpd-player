@@ -22,7 +22,7 @@ Thread.new do
     when .elapsed?
       if status = mpd.status
         elapsed = value.to_f
-        total = status["duration"].to_f
+        total = status["duration"]?.try(&.to_f) || 0.0
         webview.eval("window.musicPlayer.updateProgressBar(#{elapsed}, #{total})")
       end
     when .song?
@@ -41,8 +41,21 @@ Thread.new do
       case value
       when "play"
         webview.eval("window.musicPlayer.updatePlayButton('play')")
+        webview.eval("document.getElementById('play-button').disabled = false")
+        webview.eval("document.getElementById('next-button').disabled = false")
+        webview.eval("document.getElementById('prev-button').disabled = false")
       when "pause"
         webview.eval("window.musicPlayer.updatePlayButton('pause')")
+        webview.eval("document.getElementById('play-button').disabled = false")
+        webview.eval("document.getElementById('next-button').disabled = false")
+        webview.eval("document.getElementById('prev-button').disabled = false")
+      when "stop"
+        webview.eval("window.musicPlayer.updateSong()")
+        webview.eval("document.getElementById('play-button').disabled = false")
+        webview.eval("document.getElementById('next-button').disabled = true")
+        webview.eval("document.getElementById('prev-button').disabled = true")
+        webview.eval("window.musicPlayer.updateProgress()")
+        webview.title = "MPD Controller"
       end
     when .random?
       webview.eval("window.musicPlayer.updateRandomButton('#{value}')")
