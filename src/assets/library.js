@@ -8,11 +8,27 @@ class Library {
     try {
       this.data = await window['mpdClient.loadLibraryData']();
       if (!this.data) {
+        // If loading failed or file doesn't exist, try updating the library
+        this.data = await window['mpdClient.updateLibraryData']();
+      }
+      if (!this.data) {
         throw new Error('Failed to load library data');
       }
       this.initialize();
     } catch (error) {
       console.error('Error loading library data:', error);
+    }
+  }
+
+  async updateLibrary() {
+    try {
+      this.data = await window['mpdClient.updateLibraryData']();
+      if (!this.data) {
+        throw new Error('Failed to update library data');
+      }
+      this.initialize();
+    } catch (error) {
+      console.error('Error updating library data:', error);
     }
   }
 
@@ -112,6 +128,16 @@ class Library {
   }
 
   setupEventListeners() {
+    // Add refresh button event listener
+    const refreshButton = document.getElementById('refresh-library');
+    if (refreshButton) {
+      refreshButton.addEventListener('click', async () => {
+        refreshButton.classList.add('fa-spin');
+        await this.updateLibrary();
+        refreshButton.classList.remove('fa-spin');
+      });
+    }
+
     document.querySelectorAll('.tree-header').forEach(header => {
       header.addEventListener('click', (e) => {
         // Don't toggle if clicking the add-to-playlist button

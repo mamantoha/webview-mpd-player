@@ -216,7 +216,10 @@ webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |a|
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
+# Add path constant for the library data file
+LIBRARY_DATA_PATH = File.join(__DIR__, "assets", "library-data.json")
+
+webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
   # Get all songs from MPD
   if all_items = mpd_client.listallinfo
     songs = all_items.select { |item| item["file"]? }
@@ -234,10 +237,9 @@ webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
       grouped_songs[artist][album] ||= [] of Hash(String, String | Int32)
 
       grouped_songs[artist][album] << {
-        "title"    => song["Title"],
+        "title" => song["Title"],
         "duration" => (song["duration"]? || song["Time"]? || "0").to_f.to_i,
-        "url"      => song["file"],
-        "date"     => song["Date"]? || "Unknown",
+        "url" => song["file"]
       }
     end
 
@@ -247,22 +249,34 @@ webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
 
         albums_data = albums.map do |album_name, songs|
           {
-            "name"  => album_name,
-            "year"  => songs.first["date"],
-            "songs" => songs,
+            "name" => album_name,
+            "year" => (songs.first["Date"]? || "Unknown").to_s,
+            "songs" => songs
           }
         end
 
-        # Create artist entry
         {
-          "name"   => artist_name,
-          "albums" => albums_data,
+          "name" => artist_name,
+          "albums" => albums_data
         }
-      end,
+      end
     }
 
+    # Save to file
+    File.write(LIBRARY_DATA_PATH, library_data.to_json)
     JSON.parse(library_data.to_json)
   else
+    JSON::Any.new(nil)
+  end
+})
+
+webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
+  if File.exists?(LIBRARY_DATA_PATH)
+    content = File.read(LIBRARY_DATA_PATH)
+    JSON.parse(content)
+  else
+    # If file doesn't exist, create it by fetching fresh data
+    webview.eval("window['mpdClient.updateLibraryData']()")
     JSON::Any.new(nil)
   end
 })

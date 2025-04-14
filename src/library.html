@@ -9,9 +9,14 @@
   </head>
   <body>
     <div class="library-container">
-      <button class="back-button" onclick="window.location.href='index.html'">
-        <i class="fas fa-arrow-left"></i> Back to Player
-      </button>
+      <div class="library-header">
+        <button class="back-button" onclick="window.location.href='index.html'">
+          <i class="fas fa-arrow-left"></i> Back to Player
+        </button>
+        <button id="refresh-library" title="Refresh Library">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+      </div>
 
       <h1>Library</h1>
       <div id="library-content">
