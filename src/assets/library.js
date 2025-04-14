@@ -40,6 +40,9 @@ class Library {
 
   renderLibrary() {
     const libraryContent = document.getElementById('library-content');
+    // Clear existing content
+    libraryContent.innerHTML = '';
+
     const treeView = document.createElement('ul');
     treeView.className = 'tree-view';
 
