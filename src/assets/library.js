@@ -76,11 +76,11 @@ class Library {
     header.className = 'tree-header';
     header.innerHTML = `
       <div class="tree-header-content">
-        <span class="tree-toggle"><i class="fas fa-chevron-right"></i></span>
+        <span class="tree-toggle">▶</span>
         <span>${artist.name}</span>
       </div>
-      <button class="add-to-playlist" title="Add all songs to playlist">
-        <i class="fas fa-plus"></i> Add All
+      <button class="add-to-playlist" title="Add all songs to playlist" data-urls='${JSON.stringify(this.getArtistUrls(artist))}'>
+        <i class="fas fa-plus"></i>
       </button>
     `;
 
@@ -88,7 +88,7 @@ class Library {
     content.className = 'tree-content';
 
     artist.albums.forEach(album => {
-      const albumItem = this.createAlbumItem(album);
+      const albumItem = this.createAlbumItem(album, artist.name);
       content.appendChild(albumItem);
     });
 
@@ -98,7 +98,7 @@ class Library {
     return item;
   }
 
-  createAlbumItem(album) {
+  createAlbumItem(album, artistName) {
     const item = document.createElement('li');
     item.className = 'tree-item';
 
@@ -106,11 +106,11 @@ class Library {
     header.className = 'tree-header';
     header.innerHTML = `
       <div class="tree-header-content">
-        <span class="tree-toggle"><i class="fas fa-chevron-right"></i></span>
+        <span class="tree-toggle">▶</span>
         <span>${album.name} (${album.year})</span>
       </div>
-      <button class="add-to-playlist" title="Add album to playlist">
-        <i class="fas fa-plus"></i> Add Album
+      <button class="add-to-playlist" title="Add album to playlist" data-urls='${JSON.stringify(this.getAlbumUrls(album))}'>
+        <i class="fas fa-plus"></i>
       </button>
     `;
 
@@ -136,12 +136,26 @@ class Library {
         <span>${song.title}</span>
         <span style="color: #b3b3b3">${this.formatDuration(song.duration)}</span>
       </div>
-      <button class="add-to-playlist" title="Add song to playlist">
+      <button class="add-to-playlist" title="Add song to playlist" data-urls='${JSON.stringify([song.url])}'>
         <i class="fas fa-plus"></i>
       </button>
     `;
 
     return item;
+  }
+
+  getArtistUrls(artist) {
+    const urls = [];
+    for (const album of artist.albums) {
+      for (const song of album.songs) {
+        urls.push(song.url);
+      }
+    }
+    return urls;
+  }
+
+  getAlbumUrls(album) {
+    return album.songs.map(song => song.url);
   }
 
   setupEventListeners() {
@@ -164,11 +178,10 @@ class Library {
         }
 
         const content = header.nextElementSibling;
-        const toggle = header.querySelector('.tree-toggle i');
+        const toggle = header.querySelector('.tree-toggle');
 
         content.classList.toggle('expanded');
-        toggle.classList.toggle('fa-chevron-right');
-        toggle.classList.toggle('fa-chevron-down');
+        toggle.textContent = content.classList.contains('expanded') ? '▼' : '▶';
       });
     });
 
@@ -176,82 +189,11 @@ class Library {
     document.querySelectorAll('.add-to-playlist').forEach(button => {
       button.addEventListener('click', (e) => {
         e.stopPropagation();
-
-        const item = e.target.closest('.tree-item, .song-item');
-
-        if (item.classList.contains('song-item')) {
-          // Find the song in the mock data
-          const songTitle = item.querySelector('.song-item-content span').textContent;
-          const songUrls = this.findSongUrls([songTitle]);
-          console.log('Adding song to playlist:', songUrls);
-          window['mpdClient.add_to_playlist'](songUrls);
-        } else {
-          // For artist or album
-          const headerText = item.querySelector('.tree-header-content span:last-child').textContent;
-
-          if (headerText.includes('(')) {
-            // This is an album
-            const albumName = headerText.split(' (')[0];
-            const artistName = item.closest('.tree-content').previousElementSibling.querySelector('.tree-header-content span:last-child').textContent;
-            const songUrls = this.findAlbumSongUrls(albumName, artistName);
-            console.log('Adding album songs to playlist:', songUrls);
-            window['mpdClient.add_to_playlist'](songUrls);
-          } else {
-            // This is an artist
-            const artistName = headerText;
-            const songUrls = this.findArtistSongUrls(artistName);
-            console.log('Adding all artist songs to playlist:', songUrls);
-            window['mpdClient.add_to_playlist'](songUrls);
-          }
-        }
+        const urls = JSON.parse(button.dataset.urls);
+        console.log('Adding songs to playlist:', urls);
+        window['mpdClient.add_to_playlist'](urls);
       });
     });
-  }
-
-  findSongUrls(songTitles) {
-    const urls = [];
-    this.data.artists.forEach(artist => {
-      artist.albums.forEach(album => {
-        album.songs.forEach(song => {
-          if (songTitles.includes(song.title)) {
-            urls.push(song.url);
-          }
-        });
-      });
-    });
-    return urls;
-  }
-
-  findAlbumSongUrls(albumName, artistName) {
-    const urls = [];
-    for (const artist of this.data.artists) {
-      if (artist.name === artistName) {
-        for (const album of artist.albums) {
-          if (album.name === albumName) {
-            for (const song of album.songs) {
-              urls.push(song.url);
-            }
-            break;
-          }
-        }
-        break;
-      }
-    }
-    return urls;
-  }
-
-  findArtistSongUrls(artistName) {
-    const urls = [];
-    this.data.artists.forEach(artist => {
-      if (artist.name === artistName) {
-        artist.albums.forEach(album => {
-          album.songs.forEach(song => {
-            urls.push(song.url);
-          });
-        });
-      }
-    });
-    return urls;
   }
 
   formatDuration(seconds) {
