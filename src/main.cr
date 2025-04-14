@@ -197,6 +197,14 @@ webview.bind("mpdClient.play", Webview::JSProc.new { |a|
   JSON::Any.new("OK")
 })
 
+webview.bind("mpdClient.delete", Webview::JSProc.new { |a|
+  songpos = a.first.as_i
+
+  mpd_client.delete(songpos)
+
+  JSON::Any.new("OK")
+})
+
 webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
   # a is Array(JSON::Any)
   # from 0 to 1

@@ -247,7 +247,8 @@ body.player-layout {
 
 .playlist-item {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
   padding: min(3vw, 15px);
   border-radius: 8px;
   margin-bottom: min(2vw, 10px);
@@ -266,6 +267,25 @@ body.player-layout {
   border-left: 4px solid #1db954;
 }
 
+.playlist-item .song-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  padding-right: 40px; /* Make space for the delete button */
+}
+
+.playlist-item .song-title {
+  font-size: clamp(14px, 4vw, 16px);
+  color: #fff;
+}
+
+.playlist-item .song-artist {
+  font-size: clamp(12px, 3vw, 14px);
+  color: #b3b3b3;
+}
+
 .playlist-item .song-time {
   position: absolute;
   top: min(3vw, 15px);
@@ -274,16 +294,23 @@ body.player-layout {
   color: #b3b3b3;
 }
 
-.playlist-item .song-title {
-  font-size: clamp(14px, 4vw, 16px);
-  color: #fff;
-  margin-bottom: 4px;
-  padding-right: 60px; /* Make space for time */
+.playlist-item .delete-song {
+  background: none;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+  padding: 8px;
+  opacity: 0;
+  transition: all 0.2s;
+  margin-top: min(3vw, 15px);
 }
 
-.playlist-item .song-artist {
-  font-size: clamp(12px, 3vw, 14px);
-  color: #b3b3b3;
+.playlist-item:hover .delete-song {
+  opacity: 1;
+}
+
+.playlist-item .delete-song:hover {
+  color: #ff4444;
 }
 
 /* Library Styles */

@@ -176,17 +176,35 @@ class MusicPlayer {
       item.setAttribute("data-artist", song.artist);
       item.setAttribute("data-time", song.time);
       item.innerHTML = `
-        <span class="song-title">${song.title}</span>
-        <span class="song-artist">${song.artist}</span>
-        <span class="song-time">${this.formatTime(song.time)}</span>
+        <div class="song-info">
+          <span class="song-title">${song.title}</span>
+          <span class="song-artist">${song.artist}</span>
+          <span class="song-time">${this.formatTime(song.time)}</span>
+        </div>
+        <button class="delete-song" title="Delete song from playlist" data-pos="${index}">
+          <i class="fas fa-trash"></i>
+        </button>
       `;
 
       // Add click handler to play the song
-      item.addEventListener("click", async () => {
-        await window["mpdClient.play"](index);
+      item.addEventListener("click", async (e) => {
+        // Don't trigger play if clicking the delete button
+        if (!e.target.closest('.delete-song')) {
+          await window["mpdClient.play"](index);
+        }
       });
 
       playlistContent.appendChild(item);
+    });
+
+    // Add delete button handlers
+    document.querySelectorAll('.delete-song').forEach(button => {
+      button.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const pos = parseInt(button.dataset.pos);
+        await window["mpdClient.delete"](pos);
+        await this.updatePlaylist();
+      });
     });
 
     // Find and update active song after playlist is populated
