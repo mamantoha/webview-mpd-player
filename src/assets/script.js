@@ -175,16 +175,45 @@ class MusicPlayer {
       item.setAttribute("data-title", song.title);
       item.setAttribute("data-artist", song.artist);
       item.setAttribute("data-time", song.time);
-      item.innerHTML = `
-        <div class="song-info">
-          <span class="song-title">${song.title}</span>
-          <span class="song-artist">${song.artist}</span>
-          <span class="song-time">${this.formatTime(song.time)}</span>
-        </div>
-        <button class="delete-song" title="Delete song from playlist" data-pos="${index}">
-          <i class="fas fa-trash"></i>
-        </button>
-      `;
+
+      // Create song info container
+      const songInfo = document.createElement("div");
+      songInfo.className = "song-info";
+
+      // Create and add song title
+      const title = document.createElement("span");
+      title.className = "song-title";
+      title.textContent = song.title;
+      songInfo.appendChild(title);
+
+      // Create and add song artist
+      const artist = document.createElement("span");
+      artist.className = "song-artist";
+      artist.textContent = song.artist;
+      songInfo.appendChild(artist);
+
+      // Create and add song time
+      const time = document.createElement("span");
+      time.className = "song-time";
+      time.textContent = this.formatTime(song.time);
+      songInfo.appendChild(time);
+
+      // Create delete button
+      const deleteButton = document.createElement("button");
+      deleteButton.className = "delete-song";
+      deleteButton.title = "Delete song from playlist";
+      deleteButton.setAttribute("data-pos", index.toString());
+
+      const deleteIcon = document.createElement("i");
+      deleteIcon.className = "fas fa-trash";
+      deleteButton.appendChild(deleteIcon);
+
+      // Add delete button handler
+      deleteButton.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        await window["mpdClient.delete"](index);
+        await this.updatePlaylist();
+      });
 
       // Add click handler to play the song
       item.addEventListener("click", async (e) => {
@@ -194,14 +223,9 @@ class MusicPlayer {
         }
       });
 
-      // Add delete button handler
-      const deleteButton = item.querySelector('.delete-song');
-      deleteButton.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        await window["mpdClient.delete"](index);
-        await this.updatePlaylist();
-      });
-
+      // Assemble the item
+      item.appendChild(songInfo);
+      item.appendChild(deleteButton);
       playlistContent.appendChild(item);
     });
 
