@@ -192,14 +192,16 @@ class Library {
           if (headerText.includes('(')) {
             // This is an album
             const albumName = headerText.split(' (')[0];
-            const songUrls = this.findAlbumSongUrls(albumName);
+            const artistName = item.closest('.tree-content').previousElementSibling.querySelector('.tree-header-content span:last-child').textContent;
+            const songUrls = this.findAlbumSongUrls(albumName, artistName);
             console.log('Adding album songs to playlist:', songUrls);
-            // window['mpdClient.add_to_playlist'](songUrls);
+            window['mpdClient.add_to_playlist'](songUrls);
           } else {
             // This is an artist
             const artistName = headerText;
             const songUrls = this.findArtistSongUrls(artistName);
             console.log('Adding all artist songs to playlist:', songUrls);
+            window['mpdClient.add_to_playlist'](songUrls);
           }
         }
       });
@@ -220,17 +222,21 @@ class Library {
     return urls;
   }
 
-  findAlbumSongUrls(albumName) {
+  findAlbumSongUrls(albumName, artistName) {
     const urls = [];
-    this.data.artists.forEach(artist => {
-      artist.albums.forEach(album => {
-        if (album.name === albumName) {
-          album.songs.forEach(song => {
-            urls.push(song.url);
-          });
+    for (const artist of this.data.artists) {
+      if (artist.name === artistName) {
+        for (const album of artist.albums) {
+          if (album.name === albumName) {
+            for (const song of album.songs) {
+              urls.push(song.url);
+            }
+            break;
+          }
         }
-      });
-    });
+        break;
+      }
+    }
     return urls;
   }
 
