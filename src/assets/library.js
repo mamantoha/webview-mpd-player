@@ -179,6 +179,7 @@ class Library {
             const albumName = headerText.split(' (')[0];
             const songUrls = this.findAlbumSongUrls(albumName);
             console.log('Adding album songs to playlist:', songUrls);
+            window['mpdClient.add_to_playlist'](songUrls);
           } else {
             // This is an artist
             const artistName = headerText;

@@ -220,6 +220,7 @@ webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |a|
 LIBRARY_DATA_PATH = File.join(__DIR__, "assets", "library-data.json")
 
 webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
+  puts "updateLibraryData called with arguments: #{a}"
   # Get all songs from MPD
   if all_items = mpd_client.listallinfo
     songs = all_items.select { |item| item["file"]? }
@@ -279,6 +280,18 @@ webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
     webview.eval("window['mpdClient.updateLibraryData']()")
     JSON::Any.new(nil)
   end
+})
+
+webview.bind("mpdClient.add_to_playlist", Webview::JSProc.new { |a|
+  urls = a.first.as_a.map(&.to_s)
+
+  mpd_client.with_command_list do
+    urls.each do |url|
+      mpd_client.add(url)
+    end
+  end
+
+  JSON::Any.new(nil)
 })
 
 if song = mpd_client.currentsong
