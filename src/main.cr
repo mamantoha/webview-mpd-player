@@ -301,7 +301,7 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
     }
 
     # Save to file
-    File.write(get_library_data_path, library_data.to_json)
+    File.write(get_library_data_path, library_data.to_pretty_json)
     JSON.parse(library_data.to_json)
   else
     JSON::Any.new(nil)
