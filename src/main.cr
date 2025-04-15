@@ -274,9 +274,10 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
       grouped_songs[artist][album] ||= [] of Hash(String, String | Int32)
 
       grouped_songs[artist][album] << {
+        "url"      => song["file"],
         "title"    => song["Title"],
         "duration" => (song["duration"]? || song["Time"]? || "0").to_f.to_i,
-        "url"      => song["file"],
+        "date"     => song["Date"],
       }
     end
 
@@ -288,7 +289,7 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
           songs = albums[album_name]
           {
             "name"  => album_name,
-            "year"  => (songs.first["Date"]? || "Unknown").to_s,
+            "year"  => (songs.first["date"]? || "Unknown").to_s,
             "songs" => songs,
           }
         end
