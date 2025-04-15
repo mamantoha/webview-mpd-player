@@ -230,13 +230,26 @@ body.player-layout {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: min(5vw, 20px);
-  border-bottom: 1px solid #404040;
+  padding: 1rem;
+  border-bottom: 1px solid #2a2a2a;
 }
 
 .playlist-header h2 {
   font-size: clamp(20px, 6vw, 24px);
   color: #fff;
+}
+
+.playlist-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#clear-playlist {
+  color: #ff4444;
+}
+
+#clear-playlist:hover {
+  color: #ff6666;
 }
 
 .playlist-content {

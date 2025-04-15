@@ -189,6 +189,12 @@ webview.bind("mpdClient.playlist", Webview::JSProc.new { |a|
   JSON.parse(songs.to_json)
 })
 
+webview.bind("mpdClient.clear", Webview::JSProc.new { |a|
+  mpd_client.clear
+
+  JSON::Any.new("OK")
+})
+
 webview.bind("mpdClient.play", Webview::JSProc.new { |a|
   songpos = a.first.as_i
 

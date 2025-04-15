@@ -2,6 +2,7 @@
 function setupPlaylistHandlers() {
   const playlistButton = document.getElementById("playlist-button");
   const closePlaylistButton = document.getElementById("close-playlist");
+  const clearPlaylistButton = document.getElementById("clear-playlist");
   const playlistOverlay = document.getElementById("playlist-overlay");
 
   playlistButton.addEventListener("click", () => {
@@ -10,6 +11,10 @@ function setupPlaylistHandlers() {
 
   closePlaylistButton.addEventListener("click", () => {
     playlistOverlay.classList.remove("visible");
+  });
+
+  clearPlaylistButton.addEventListener("click", async () => {
+    await window["mpdClient.clear"]();
   });
 }
 
