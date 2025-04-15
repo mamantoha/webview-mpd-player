@@ -148,7 +148,7 @@ class MusicPlayer {
     );
 
     if (item) {
-      item.scrollIntoView({ behavior: "smooth", block: "center" });
+      // item.scrollIntoView({ behavior: "smooth", block: "center" });
 
       document.querySelectorAll(".playlist-item").forEach((item) => {
         item.classList.remove("active");
@@ -173,6 +173,7 @@ class MusicPlayer {
       item.setAttribute("data-title", song.title);
       item.setAttribute("data-artist", song.artist);
       item.setAttribute("data-time", song.time);
+      item.setAttribute("draggable", "true");
 
       // Create song info container
       const songInfo = document.createElement("div");
@@ -220,6 +221,68 @@ class MusicPlayer {
         }
       });
 
+      // Add drag and drop handlers
+      item.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", index.toString());
+        item.classList.add("dragging");
+      });
+
+      item.addEventListener("dragend", () => {
+        item.classList.remove("dragging");
+        // Clear any existing scroll interval
+        if (this.scrollInterval) {
+          clearInterval(this.scrollInterval);
+          this.scrollInterval = null;
+        }
+      });
+
+      item.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const draggingItem = document.querySelector(".dragging");
+        if (!draggingItem) return;
+
+        // Handle auto-scrolling
+        const scrollThreshold = 50; // pixels from top/bottom to start scrolling
+        const scrollSpeed = 10; // pixels per interval
+        const scrollInterval = 50; // milliseconds
+
+        const rect = playlistContent.getBoundingClientRect();
+        const mouseY = e.clientY - rect.top;
+
+        // Clear any existing scroll interval
+        if (this.scrollInterval) {
+          clearInterval(this.scrollInterval);
+          this.scrollInterval = null;
+        }
+
+        // Start scrolling if near top or bottom
+        if (mouseY < scrollThreshold) {
+          this.scrollInterval = setInterval(() => {
+            playlistContent.scrollTop -= scrollSpeed;
+          }, scrollInterval);
+        } else if (mouseY > rect.height - scrollThreshold) {
+          this.scrollInterval = setInterval(() => {
+            playlistContent.scrollTop += scrollSpeed;
+          }, scrollInterval);
+        }
+
+        const afterElement = this.getDragAfterElement(playlistContent, e.clientY);
+        if (afterElement) {
+          playlistContent.insertBefore(draggingItem, afterElement);
+        } else {
+          playlistContent.appendChild(draggingItem);
+        }
+      });
+
+      item.addEventListener("drop", async (e) => {
+        e.preventDefault();
+        const oldPos = parseInt(e.dataTransfer.getData("text/plain"));
+        const newPos = Array.from(playlistContent.children).indexOf(item);
+
+        console.log(`Moving song from position ${oldPos} to ${newPos}`);
+        await window["mpdClient.move"](oldPos, newPos);
+      });
+
       // Assemble the item
       item.appendChild(songInfo);
       item.appendChild(deleteButton);
@@ -232,5 +295,20 @@ class MusicPlayer {
       const activeIndex = playlist.indexOf(activeSong);
       this.updateSongInPlaylist(activeIndex);
     }
+  }
+
+  getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll(".playlist-item:not(.dragging)")];
+
+    return draggableElements.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+
+      if (offset < 0 && offset > closest.offset) {
+        return { offset: offset, element: child };
+      } else {
+        return closest;
+      }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
   }
 }
