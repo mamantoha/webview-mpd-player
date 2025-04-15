@@ -1,6 +1,8 @@
 require "base64"
 require "webview"
 require "crystal_mpd"
+require "json"
+require "file_utils"
 
 webview = Webview.window(
   400,
@@ -243,8 +245,15 @@ webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |a|
   JSON::Any.new("OK")
 })
 
-# Add path constant for the library data file
-LIBRARY_DATA_PATH = File.join(__DIR__, "assets", "library-data.json")
+def get_config_dir
+  config_dir = File.join(Path.home, ".config", "webview-mpd-player")
+  Dir.mkdir_p(config_dir) unless Dir.exists?(config_dir)
+  config_dir
+end
+
+def get_library_data_path
+  File.join(get_config_dir, "library-data.json")
+end
 
 webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
   puts "updateLibraryData called with arguments: #{a}"
@@ -291,7 +300,7 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
     }
 
     # Save to file
-    File.write(LIBRARY_DATA_PATH, library_data.to_json)
+    File.write(get_library_data_path, library_data.to_json)
     JSON.parse(library_data.to_json)
   else
     JSON::Any.new(nil)
@@ -299,8 +308,8 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
 })
 
 webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
-  if File.exists?(LIBRARY_DATA_PATH)
-    content = File.read(LIBRARY_DATA_PATH)
+  if File.exists?(get_library_data_path)
+    content = File.read(get_library_data_path)
     JSON.parse(content)
   else
     # If file doesn't exist, create it by fetching fresh data
