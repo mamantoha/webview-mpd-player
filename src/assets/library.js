@@ -253,11 +253,19 @@ class Library {
 
     // Add click handlers for add-to-playlist buttons
     document.querySelectorAll('.add-to-playlist').forEach(button => {
-      button.addEventListener('click', (e) => {
+      button.addEventListener('click', async (e) => {
         e.stopPropagation();
         const urls = JSON.parse(button.dataset.urls);
         console.log('Adding songs to playlist:', urls);
-        window['mpdClient.add_to_playlist'](urls);
+
+        // Add visual feedback
+        button.classList.add('added');
+        await window['mpdClient.add_to_playlist'](urls);
+
+        // Remove the class after animation completes
+        setTimeout(() => {
+          button.classList.remove('added');
+        }, 500);
       });
     });
   }

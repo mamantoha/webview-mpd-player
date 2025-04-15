@@ -437,7 +437,7 @@ body.player-layout {
   border-radius: 4px;
   font-size: 14px;
   opacity: 0;
-  transition: opacity 0.2s, background-color 0.2s;
+  transition: opacity 0.2s, background-color 0.2s, transform 0.2s;
 }
 
 .tree-header:hover .add-to-playlist,
@@ -447,6 +447,25 @@ body.player-layout {
 
 .add-to-playlist:hover {
   background-color: rgba(29, 185, 84, 0.1);
+}
+
+.add-to-playlist.added {
+  animation: addSuccess 0.5s ease-in-out;
+}
+
+@keyframes addSuccess {
+  0% {
+    transform: scale(1);
+    color: #1db954;
+  }
+  50% {
+    transform: scale(1.2);
+    color: #1ed760;
+  }
+  100% {
+    transform: scale(1);
+    color: #1db954;
+  }
 }
 
 .song-item-content {
