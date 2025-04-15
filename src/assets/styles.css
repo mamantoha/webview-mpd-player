@@ -230,8 +230,8 @@ body.player-layout {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #2a2a2a;
+  padding: 20px;
+  border-bottom: 1px solid #404040;
 }
 
 .playlist-header h2 {
@@ -245,7 +245,13 @@ body.player-layout {
 }
 
 #clear-playlist {
+  background: none;
+  border: none;
   color: #ff4444;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 1.2em;
+  transition: color 0.2s;
 }
 
 #clear-playlist:hover {

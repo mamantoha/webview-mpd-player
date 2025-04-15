@@ -1,7 +1,7 @@
 // Setup UI handlers
 function setupPlaylistHandlers() {
   const playlistButton = document.getElementById("playlist-button");
-  const closePlaylistButton = document.getElementById("close-playlist");
+  const backButton = document.querySelector(".playlist-overlay .back-button");
   const clearPlaylistButton = document.getElementById("clear-playlist");
   const playlistOverlay = document.getElementById("playlist-overlay");
 
@@ -9,7 +9,7 @@ function setupPlaylistHandlers() {
     playlistOverlay.classList.add("visible");
   });
 
-  closePlaylistButton.addEventListener("click", () => {
+  backButton.addEventListener("click", () => {
     playlistOverlay.classList.remove("visible");
   });
 
