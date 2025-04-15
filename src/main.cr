@@ -281,10 +281,11 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
     end
 
     library_data = {
-      "artists" => grouped_songs.keys.map do |artist_name|
+      "artists" => grouped_songs.keys.sort_by(&.downcase).map do |artist_name|
         albums = grouped_songs[artist_name]
 
-        albums_data = albums.map do |album_name, songs|
+        albums_data = albums.keys.sort_by(&.downcase).map do |album_name|
+          songs = albums[album_name]
           {
             "name"  => album_name,
             "year"  => (songs.first["Date"]? || "Unknown").to_s,
