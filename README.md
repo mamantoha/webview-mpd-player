@@ -29,7 +29,7 @@ The user interface for the player was developed with assistance from ChatGPT and
    ```bash
    shards install
    shards build
-
+   ./bin/garnetune
    ```
 
 ## Screenshots
