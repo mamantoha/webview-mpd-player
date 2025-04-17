@@ -1,4 +1,7 @@
-<p align="left"><img src="https://github.com/mamantoha/webview-mpd-player/raw/refs/heads/main/src/assets/icon.png" alt="webview-mpd-player" height="150px"></p>
+<p align="left">
+  <img src="https://github.com/mamantoha/webview-mpd-player/raw/refs/heads/main/src/assets/icon.png" alt="webview-mpd-player" height="150px">
+  <span style="font-size: 2em; font-weight: bold; vertical-align: middle; margin-left: 20px;">webview-mpd-player</span>
+</p>
 
 
 A lightweight MPD (Music Player Daemon) client built with Crystal and Webview. Features a web-based interface for controlling MPD playback, managing playlists, and displaying album artwork. Includes a music library browser with artist/album organization.
