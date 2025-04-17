@@ -11,7 +11,7 @@ dependencies:
     github: mamantoha/crystal_mpd
 
 targets:
-  mpd-player:
+  garnetune:
     main: src/main.cr
 
 crystal: '>= 1.15.0'
