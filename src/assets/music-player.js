@@ -16,6 +16,7 @@ class MusicPlayer {
     const song = await window["mpdClient.current_song"]();
     document.getElementById("current-song").innerText = song.title;
     document.getElementById("artist-name").innerText = song.artist;
+    await window["webview.set_title"](`${song.artist} - ${song.title}`)
 
     // Fetch and set album art
     const albumArt = await window["mpdClient.album_art"]();

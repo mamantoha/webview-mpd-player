@@ -64,8 +64,6 @@ Thread.new do
 
         webview.eval("window.musicPlayer.updateSong()")
         webview.eval("window.musicPlayer.updateSongInPlaylist(#{song["Pos"]})")
-
-        webview.title = title
       end
     when .playlist?
       webview.eval("window.musicPlayer.updatePlaylist()")
@@ -102,6 +100,14 @@ Thread.new do
 end
 
 mpd_client = MPD::Client.new(config["host"].as_s, config["port"].as_i)
+
+webview.bind("webview.set_title", Webview::JSProc.new { |a|
+  title = a.first.as_s
+
+  webview.title = title
+
+  JSON::Any.new(nil)
+})
 
 webview.bind("mpdClient.status", Webview::JSProc.new { |a|
   if status = mpd_client.status
