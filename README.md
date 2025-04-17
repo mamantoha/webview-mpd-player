@@ -7,6 +7,11 @@ A lightweight MPD (Music Player Daemon) client built with Crystal and Webview. F
 
 This application serves as a demonstration of building real-time applications using Crystal and Webview. It showcases how to create responsive desktop applications that can handle live updates and user interactions while maintaining a lightweight footprint. The integration with MPD provides a practical example of managing real-time events, state synchronization, and UI updates in a Crystal-based desktop application.
 
+## Name Origin
+
+The name "Garnetune" is a playful combination of "Garnet" and "tune". Garnet is a type of crystal, which references the Crystal programming language used to build this application. Combined with "tune" for its music-playing capabilities, the name reflects both the technical foundation and musical purpose of the application.
+
+
 ## Development Notes
 
 The user interface for the player was developed with assistance from ChatGPT and Cursor.
