@@ -29,6 +29,7 @@ This application serves as a demonstration of building real-time applications us
 
 ![Player](src/assets/screenshots/player.png)
 ![Playlist](src/assets/screenshots/playlist.png)
+![Library](src/assets/screenshots/library.png)
 
 ## Contributing
 
