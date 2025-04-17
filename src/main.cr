@@ -1,6 +1,8 @@
 require "base64"
 require "webview"
 require "crystal_mpd"
+require "json"
+require "file_utils"
 
 webview = Webview.window(
   400,
@@ -22,7 +24,7 @@ Thread.new do
     when .elapsed?
       if status = mpd.status
         elapsed = value.to_f
-        total = status["duration"].to_f
+        total = status["duration"]?.try(&.to_f) || 0.0
         webview.eval("window.musicPlayer.updateProgressBar(#{elapsed}, #{total})")
       end
     when .song?
@@ -41,8 +43,21 @@ Thread.new do
       case value
       when "play"
         webview.eval("window.musicPlayer.updatePlayButton('play')")
+        webview.eval("document.getElementById('play-button').disabled = false")
+        webview.eval("document.getElementById('next-button').disabled = false")
+        webview.eval("document.getElementById('prev-button').disabled = false")
       when "pause"
         webview.eval("window.musicPlayer.updatePlayButton('pause')")
+        webview.eval("document.getElementById('play-button').disabled = false")
+        webview.eval("document.getElementById('next-button').disabled = false")
+        webview.eval("document.getElementById('prev-button').disabled = false")
+      when "stop"
+        webview.eval("window.musicPlayer.updateSong()")
+        webview.eval("document.getElementById('play-button').disabled = false")
+        webview.eval("document.getElementById('next-button').disabled = true")
+        webview.eval("document.getElementById('prev-button').disabled = true")
+        webview.eval("window.musicPlayer.updateProgress()")
+        webview.title = "MPD Controller"
       end
     when .random?
       webview.eval("window.musicPlayer.updateRandomButton('#{value}')")
@@ -176,10 +191,33 @@ webview.bind("mpdClient.playlist", Webview::JSProc.new { |a|
   JSON.parse(songs.to_json)
 })
 
+webview.bind("mpdClient.clear", Webview::JSProc.new { |a|
+  mpd_client.clear
+
+  JSON::Any.new("OK")
+})
+
 webview.bind("mpdClient.play", Webview::JSProc.new { |a|
   songpos = a.first.as_i
 
   mpd_client.play(songpos)
+
+  JSON::Any.new("OK")
+})
+
+webview.bind("mpdClient.delete", Webview::JSProc.new { |a|
+  songpos = a.first.as_i
+
+  mpd_client.delete(songpos)
+
+  JSON::Any.new("OK")
+})
+
+webview.bind("mpdClient.move", Webview::JSProc.new { |a|
+  from = a[0].as_i
+  to = a[1].as_i
+
+  mpd_client.move(from, to)
 
   JSON::Any.new("OK")
 })
@@ -214,6 +252,93 @@ webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |a|
     end
   end
   JSON::Any.new("OK")
+})
+
+def get_config_dir
+  config_dir = File.join(Path.home, ".config", "webview-mpd-player")
+  Dir.mkdir_p(config_dir) unless Dir.exists?(config_dir)
+  config_dir
+end
+
+def get_library_data_path
+  File.join(get_config_dir, "library-data.json")
+end
+
+webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
+  puts "updateLibraryData called with arguments: #{a}"
+  # Get all songs from MPD
+  if all_items = mpd_client.listallinfo
+    songs = all_items.select { |item| item["file"]? }
+
+    # First, group songs by artist and album
+    grouped_songs = {} of String => Hash(String, Array(Hash(String, String | Int32)))
+
+    songs.each do |song|
+      next unless song["Artist"]? && song["Album"]? && song["Title"]?
+
+      artist = song["Artist"]
+      album = song["Album"]
+
+      grouped_songs[artist] ||= {} of String => Array(Hash(String, String | Int32))
+      grouped_songs[artist][album] ||= [] of Hash(String, String | Int32)
+
+      grouped_songs[artist][album] << {
+        "url"      => song["file"],
+        "title"    => song["Title"],
+        "duration" => (song["duration"]? || song["Time"]? || "0").to_f.to_i,
+        "date"     => song["Date"],
+      }
+    end
+
+    library_data = {
+      "artists" => grouped_songs.keys.sort_by(&.downcase).map do |artist_name|
+        albums = grouped_songs[artist_name]
+
+        albums_data = albums.keys.sort_by(&.downcase).map do |album_name|
+          songs = albums[album_name]
+          {
+            "name"  => album_name,
+            "year"  => (songs.first["date"]? || "Unknown").to_s,
+            "songs" => songs,
+          }
+        end
+
+        {
+          "name"   => artist_name,
+          "albums" => albums_data,
+        }
+      end,
+    }
+
+    # Save to file
+    File.write(get_library_data_path, library_data.to_pretty_json)
+    JSON.parse(library_data.to_json)
+  else
+    JSON::Any.new(nil)
+  end
+})
+
+webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
+  if File.exists?(get_library_data_path)
+    content = File.read(get_library_data_path)
+    JSON.parse(content)
+  else
+    # If file doesn't exist, create it by fetching fresh data
+    webview.eval("window['mpdClient.updateLibraryData']()")
+    JSON::Any.new(nil)
+  end
+})
+
+webview.bind("mpdClient.add_to_playlist", Webview::JSProc.new { |a|
+  urls = a.first.as_a.map(&.to_s)
+
+  mpd_client.with_command_list do
+    urls.each do |url|
+      mpd_client.add(url)
+    end
+  end
+
+  JSON::Any.new(nil)
 })
 
 if song = mpd_client.currentsong
