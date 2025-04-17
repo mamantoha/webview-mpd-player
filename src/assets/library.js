@@ -175,38 +175,40 @@ class Library {
   }
 
   createSongItem(song) {
-    const item = document.createElement('div');
-    item.className = 'song-item';
+    const item = document.createElement("div");
+    item.className = "song-item";
+    item.setAttribute("data-uri", song.uri);
 
-    // Create song info container
-    const songInfo = document.createElement('div');
-    songInfo.className = 'song-item-content';
+    const songInfo = document.createElement("div");
+    songInfo.className = "song-info";
 
-    // Create title span
-    const title = document.createElement('span');
+    const title = document.createElement("span");
+    title.className = "song-title";
     title.textContent = song.title;
     songInfo.appendChild(title);
 
-    // Create duration span
-    const duration = document.createElement('span');
-    duration.style.color = '#b3b3b3';
-    duration.textContent = this.formatDuration(song.duration);
-    songInfo.appendChild(duration);
+    const time = document.createElement("span");
+    time.className = "song-time";
+    time.textContent = this.formatTime(song.duration);
+    songInfo.appendChild(time);
 
-    // Create add to playlist button
-    const addButton = document.createElement('button');
-    addButton.className = 'add-to-playlist';
-    addButton.title = 'Add song to playlist';
-    addButton.setAttribute('data-urls', JSON.stringify([song.url]));
+    const addButton = document.createElement("button");
+    addButton.className = "add-to-playlist";
+    addButton.title = "Add to playlist";
 
-    const addIcon = document.createElement('i');
-    addIcon.className = 'fas fa-plus';
+    const addIcon = document.createElement("i");
+    addIcon.className = "fas fa-plus";
     addButton.appendChild(addIcon);
 
-    // Assemble item
+    addButton.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      addButton.classList.add("added");
+      await window["mpdClient.add"](song.uri);
+      setTimeout(() => addButton.classList.remove("added"), 500);
+    });
+
     item.appendChild(songInfo);
     item.appendChild(addButton);
-
     return item;
   }
 
@@ -270,7 +272,7 @@ class Library {
     });
   }
 
-  formatDuration(seconds) {
+  formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;

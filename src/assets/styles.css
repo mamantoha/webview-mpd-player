@@ -394,35 +394,60 @@ body.player-layout {
 
 .song-item {
   padding: 8px;
+  border-bottom: 1px solid #2a2a2a;
   cursor: pointer;
-  border-radius: 4px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: background-color 0.2s;
 }
 
 .song-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #2a2a2a;
+}
+
+.song-item .song-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.song-item .song-title {
+  font-size: 14px;
+  color: #fff;
+}
+
+.song-item .song-time {
+  font-size: 12px;
+  color: #b3b3b3;
+}
+
+.song-item .add-to-playlist {
+  background: none;
+  border: none;
+  color: #1db954;
+  cursor: pointer;
+  padding: 8px;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.song-item:hover .add-to-playlist {
+  opacity: 1;
+}
+
+.song-item .add-to-playlist:hover {
+  color: #1ed760;
+}
+
+.song-item .add-to-playlist.added {
+  animation: addSuccess 0.5s ease-in-out;
 }
 
 .song-item.active {
   background: #404040;
   border-left: 4px solid #1db954;
-}
-
-.song-item .song-time {
-  position: absolute;
-  top: min(3vw, 15px);
-  right: min(3vw, 15px);
-  font-size: clamp(10px, 3vw, 12px);
-  color: #b3b3b3;
-}
-
-.song-item .song-title {
-  font-size: clamp(14px, 4vw, 16px);
-  color: #fff;
-  margin-bottom: 4px;
-  padding-right: 60px; /* Make space for time */
 }
 
 .song-item .song-artist {
