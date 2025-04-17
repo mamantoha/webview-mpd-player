@@ -98,7 +98,8 @@ class Library {
     addButton.setAttribute("data-urls", JSON.stringify(this.getArtistUrls(artist)));
 
     const addIcon = document.createElement("i");
-    addIcon.className = "fas fa-plus";
+    addIcon.className = "add-icon";
+    addIcon.textContent = "➕";
     addButton.appendChild(addIcon);
 
     header.appendChild(headerContent);
@@ -148,7 +149,8 @@ class Library {
     addButton.setAttribute("data-urls", JSON.stringify(this.getAlbumUrls(album)));
 
     const addIcon = document.createElement("i");
-    addIcon.className = "fas fa-plus";
+    addIcon.className = "add-icon";
+    addIcon.textContent = "➕";
     addButton.appendChild(addIcon);
 
     header.appendChild(headerContent);
@@ -194,10 +196,11 @@ class Library {
     const addButton = document.createElement("button");
     addButton.className = "add-to-playlist";
     addButton.title = "Add to playlist";
+    addButton.textContent = "➕";
 
     const addIcon = document.createElement("i");
-    addIcon.className = "fas fa-plus";
-    addButton.appendChild(addIcon);
+    addIcon.className = "add-icon";
+    addIcon.textContent = "➕";
 
     addButton.addEventListener("click", async (e) => {
       e.stopPropagation();
@@ -230,9 +233,9 @@ class Library {
     const refreshButton = document.getElementById('refresh-library');
     if (refreshButton) {
       refreshButton.addEventListener('click', async () => {
-        refreshButton.classList.add('fa-spin');
+        refreshButton.classList.add('spinning');
         await this.updateLibrary();
-        refreshButton.classList.remove('fa-spin');
+        refreshButton.classList.remove('spinning');
       });
     }
 

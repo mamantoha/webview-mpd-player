@@ -3,7 +3,11 @@ function setupPlaylistHandlers() {
   const playlistButton = document.getElementById("playlist-button");
   const backButton = document.querySelector(".playlist-overlay .back-button");
   const clearPlaylistButton = document.getElementById("clear-playlist");
-  const playlistOverlay = document.getElementById("playlist-overlay");
+  const playlistOverlay = document.querySelector(".playlist-overlay");
+
+  playlistButton.textContent = "📋";
+  backButton.textContent = "←";
+  clearPlaylistButton.textContent = "🗑️";
 
   playlistButton.addEventListener("click", () => {
     playlistOverlay.classList.add("visible");
@@ -27,6 +31,9 @@ function setupLibraryHandlers() {
   const libraryButton = document.getElementById("library-button");
   const backButton = document.querySelector(".library-overlay .back-button");
   const libraryOverlay = document.querySelector(".library-overlay");
+
+  libraryButton.textContent = "📚";
+  backButton.textContent = "←";
 
   libraryButton.addEventListener("click", () => {
     libraryOverlay.classList.add("visible");
