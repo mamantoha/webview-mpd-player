@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MPD Controller</title>
     <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
   <body class="player-layout">
     <div class="player-container">
       <div class="top-bar">
-        <button class="icon-button" id="playlist-button" title="Playlist">📋</button>
-        <button class="icon-button" id="library-button" title="Library">📚</button>
+        <button class="icon-button" id="playlist-button" title="Playlist">
+          <i class="fas fa-music"></i>
+        </button>
+        <button class="icon-button" id="library-button" title="Library">
+          <i class="fas fa-book"></i>
+        </button>
       </div>
 
       <div class="album-art">
@@ -33,25 +38,41 @@
       </div>
 
       <div class="controls">
-        <button class="control-button" id="prev-button" onclick="window.musicPlayer.prev()">⏮️</button>
-        <button class="control-button play-button" id="play-button" onclick="window.musicPlayer.toggle()">▶️</button>
-        <button class="control-button" id="next-button" onclick="window.musicPlayer.next()">⏭️</button>
+        <button class="control-button" id="prev-button" onclick="window.musicPlayer.prev()">
+          <i class="fas fa-backward"></i>
+        </button>
+        <button class="control-button play-button" id="play-button" onclick="window.musicPlayer.toggle()">
+          <i class="fas fa-play"></i>
+        </button>
+        <button class="control-button" id="next-button" onclick="window.musicPlayer.next()">
+          <i class="fas fa-forward"></i>
+        </button>
       </div>
 
       <div class="bottom-controls">
-        <button class="icon-button" disabled>❤️</button>
-        <button class="icon-button" id="random-button" title="Toggle Random" onclick="window.musicPlayer.toggleRandom()">🔀</button>
-        <button class="icon-button" id="repeat-button" title="Toggle Repeat" onclick="window.musicPlayer.toggleRepeat()">🔁</button>
-        <button class="icon-button" id="single-button" title="Toggle Single" onclick="window.musicPlayer.toggleSingle()">🔂</button>
-        <button class="icon-button" disabled>⋮</button>
+        <button class="icon-button" disabled><i class="far fa-heart"></i></button>
+        <button class="icon-button" id="random-button" title="Toggle Random" onclick="window.musicPlayer.toggleRandom()">
+          <i class="fas fa-shuffle"></i>
+        </button>
+        <button class="icon-button" id="repeat-button" title="Toggle Repeat" onclick="window.musicPlayer.toggleRepeat()">
+          <i class="fas fa-repeat"></i>
+        </button>
+        <button class="icon-button" id="single-button" title="Toggle Single" onclick="window.musicPlayer.toggleSingle()">
+          <i class="fas fa-1"></i>
+        </button>
+        <button class="icon-button" disabled><i class="fas fa-ellipsis-h"></i></button>
       </div>
     </div>
 
     <div class="playlist-overlay" id="playlist-overlay">
       <div class="playlist-header">
-        <button class="back-button" title="Back to Player">←</button>
+        <button class="back-button" title="Back to Player">
+          <i class="fas fa-times"></i>
+        </button>
         <h2>Playlist</h2>
-        <button id="clear-playlist" title="Clear Playlist">🗑️</button>
+        <button id="clear-playlist" title="Clear Playlist">
+          <i class="fas fa-trash"></i>
+        </button>
       </div>
       <div class="playlist-content">
         <!-- Playlist items will be added dynamically -->
@@ -60,9 +81,13 @@
 
     <div class="library-overlay">
       <div class="library-header">
-        <button class="back-button" title="Back to Player">←</button>
+        <button class="back-button" title="Back to Player">
+          <i class="fas fa-arrow-left"></i>
+        </button>
         <h2>Library</h2>
-        <button id="refresh-library" title="Refresh Library">🔄</button>
+        <button id="refresh-library" title="Refresh Library">
+          <i class="fas fa-sync-alt"></i>
+        </button>
       </div>
       <div id="library-content" class="library-content">
         <!-- Library content will be populated by JavaScript -->

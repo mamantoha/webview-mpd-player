@@ -190,16 +190,14 @@ body.player-layout {
   font-size: clamp(16px, 4vw, 18px);
   color: #b3b3b3;
   transition: all 0.2s;
-  filter: none;
-
-}
-
-.icon-button.inactive {
-  filter: grayscale(100%);
 }
 
 .icon-button:hover {
   transform: scale(1.3);
+}
+
+.icon-button.active {
+  color: #1db954;
 }
 
 @media (min-width: 768px) {
@@ -600,13 +598,4 @@ body.player-layout {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.spinning {
-  animation: spin 1s linear infinite;
 }

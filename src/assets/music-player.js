@@ -36,7 +36,8 @@ class MusicPlayer {
   async updatePlayButton() {
     const state = await window["mpdClient.get_playback_state"]();
     const button = document.getElementById("play-button");
-    button.textContent = state === "play" ? "⏸️" : "▶️";
+    const icon = button.querySelector("i");
+    icon.className = state === "play" ? "fas fa-pause" : "fas fa-play";
   }
 
   async updateProgress() {
@@ -84,20 +85,17 @@ class MusicPlayer {
 
   updateRandomButton(state) {
     const button = document.getElementById("random-button");
-    button.textContent = "🔀";
-    button.classList.toggle("inactive", state === "0");
+    button.classList.toggle("active", state === "1");
   }
 
   updateRepeatButton(state) {
     const button = document.getElementById("repeat-button");
-    button.textContent = "🔁";
-    button.classList.toggle("inactive", state === "0");
+    button.classList.toggle("active", state === "1");
   }
 
   updateSingleButton(state) {
     const button = document.getElementById("single-button");
-    button.textContent = "🔂";
-    button.classList.toggle("inactive", state === "0");
+    button.classList.toggle("active", state === "1");
   }
 
   formatTime(seconds) {
@@ -205,8 +203,7 @@ class MusicPlayer {
       deleteButton.setAttribute("data-pos", index.toString());
 
       const deleteIcon = document.createElement("i");
-      deleteIcon.className = "delete-icon";
-      deleteIcon.textContent = "🗑️";
+      deleteIcon.className = "fas fa-trash";
       deleteButton.appendChild(deleteIcon);
 
       // Add delete button handler
