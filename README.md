@@ -1,6 +1,7 @@
+# <span align="right"><h1>webview-mpd-player</h1><span>
+
 <p align="left">
   <img src="https://github.com/mamantoha/webview-mpd-player/raw/refs/heads/main/src/assets/icon.png" alt="webview-mpd-player" height="150px">
-  <h1>webview-mpd-player</h1>
 </p>
 
 
