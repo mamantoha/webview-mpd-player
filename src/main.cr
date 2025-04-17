@@ -4,6 +4,33 @@ require "crystal_mpd"
 require "json"
 require "file_utils"
 
+class Config
+  class_getter config_dir : String = File.join(Path.home, ".config", "webview-mpd-player")
+  class_getter config_file : String = File.join(config_dir, "config.json")
+  class_getter default_config : JSON::Any = JSON.parse(%({
+    "host": "localhost",
+    "port": 6600
+  }))
+
+  def self.load
+    ensure_config_dir
+    if File.exists?(config_file)
+      JSON.parse(File.read(config_file))
+    else
+      save_default_config
+      default_config
+    end
+  end
+
+  private def self.ensure_config_dir
+    Dir.mkdir_p(config_dir) unless Dir.exists?(config_dir)
+  end
+
+  private def self.save_default_config
+    File.write(config_file, default_config.to_pretty_json)
+  end
+end
+
 webview = Webview.window(
   400,
   680,
@@ -71,7 +98,9 @@ Thread.new do
   loop { sleep 1.second }
 end
 
-mpd_client = MPD::Client.new("localhost", 6600)
+# Load configuration
+config = Config.load
+mpd_client = MPD::Client.new(config["host"].as_s, config["port"].as_i)
 
 webview.bind("mpdClient.status", Webview::JSProc.new { |a|
   if status = mpd_client.status
