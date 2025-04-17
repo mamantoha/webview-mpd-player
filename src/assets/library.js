@@ -69,52 +69,49 @@ class Library {
   }
 
   createArtistItem(artist) {
-    const item = document.createElement('li');
-    item.className = 'tree-item';
+    const item = document.createElement("li");
+    item.className = "tree-item";
 
-    const header = document.createElement('div');
-    header.className = 'tree-header';
+    const header = document.createElement("div");
+    header.className = "tree-header";
 
-    // Create header content
-    const headerContent = document.createElement('div');
-    headerContent.className = 'tree-header-content';
+    const headerContent = document.createElement("div");
+    headerContent.className = "tree-header-content";
 
-    // Create toggle span
-    const toggle = document.createElement('span');
-    toggle.className = 'tree-toggle';
-    toggle.textContent = '▶';
+    const toggle = document.createElement("span");
+    toggle.className = "tree-toggle";
+    toggle.textContent = "▶";
     headerContent.appendChild(toggle);
 
-    // Create artist name span
-    const artistName = document.createElement('span');
+    const icon = document.createElement("span");
+    icon.className = "tree-icon";
+    icon.textContent = "👤";
+    headerContent.appendChild(icon);
+
+    const artistName = document.createElement("span");
     artistName.textContent = artist.name;
     headerContent.appendChild(artistName);
 
-    // Create add to playlist button
-    const addButton = document.createElement('button');
-    addButton.className = 'add-to-playlist';
-    addButton.title = 'Add all songs to playlist';
-    addButton.setAttribute('data-urls', JSON.stringify(this.getArtistUrls(artist)));
+    const addButton = document.createElement("button");
+    addButton.className = "add-to-playlist";
+    addButton.title = "Add all songs to playlist";
+    addButton.setAttribute("data-urls", JSON.stringify(this.getArtistUrls(artist)));
 
-    const addIcon = document.createElement('i');
-    addIcon.className = 'fas fa-plus';
+    const addIcon = document.createElement("i");
+    addIcon.className = "fas fa-plus";
     addButton.appendChild(addIcon);
 
-    // Assemble header
     header.appendChild(headerContent);
     header.appendChild(addButton);
 
-    // Create content container
-    const content = document.createElement('div');
-    content.className = 'tree-content';
+    const content = document.createElement("div");
+    content.className = "tree-content";
 
-    // Add albums
     artist.albums.forEach(album => {
       const albumItem = this.createAlbumItem(album, artist.name);
       content.appendChild(albumItem);
     });
 
-    // Assemble item
     item.appendChild(header);
     item.appendChild(content);
 
@@ -122,52 +119,49 @@ class Library {
   }
 
   createAlbumItem(album, artistName) {
-    const item = document.createElement('li');
-    item.className = 'tree-item';
+    const item = document.createElement("li");
+    item.className = "tree-item";
 
-    const header = document.createElement('div');
-    header.className = 'tree-header';
+    const header = document.createElement("div");
+    header.className = "tree-header";
 
-    // Create header content
-    const headerContent = document.createElement('div');
-    headerContent.className = 'tree-header-content';
+    const headerContent = document.createElement("div");
+    headerContent.className = "tree-header-content";
 
-    // Create toggle span
-    const toggle = document.createElement('span');
-    toggle.className = 'tree-toggle';
-    toggle.textContent = '▶';
+    const toggle = document.createElement("span");
+    toggle.className = "tree-toggle";
+    toggle.textContent = "▶";
     headerContent.appendChild(toggle);
 
-    // Create album name span
-    const albumName = document.createElement('span');
+    const icon = document.createElement("span");
+    icon.className = "tree-icon";
+    icon.textContent = "💿";
+    headerContent.appendChild(icon);
+
+    const albumName = document.createElement("span");
     albumName.textContent = `${album.name} (${album.year})`;
     headerContent.appendChild(albumName);
 
-    // Create add to playlist button
-    const addButton = document.createElement('button');
-    addButton.className = 'add-to-playlist';
-    addButton.title = 'Add album to playlist';
-    addButton.setAttribute('data-urls', JSON.stringify(this.getAlbumUrls(album)));
+    const addButton = document.createElement("button");
+    addButton.className = "add-to-playlist";
+    addButton.title = "Add album to playlist";
+    addButton.setAttribute("data-urls", JSON.stringify(this.getAlbumUrls(album)));
 
-    const addIcon = document.createElement('i');
-    addIcon.className = 'fas fa-plus';
+    const addIcon = document.createElement("i");
+    addIcon.className = "fas fa-plus";
     addButton.appendChild(addIcon);
 
-    // Assemble header
     header.appendChild(headerContent);
     header.appendChild(addButton);
 
-    // Create content container
-    const content = document.createElement('div');
-    content.className = 'tree-content';
+    const content = document.createElement("div");
+    content.className = "tree-content";
 
-    // Add songs
     album.songs.forEach(song => {
       const songItem = this.createSongItem(song);
       content.appendChild(songItem);
     });
 
-    // Assemble item
     item.appendChild(header);
     item.appendChild(content);
 

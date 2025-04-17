@@ -371,6 +371,7 @@ body.player-layout {
 .tree-header-content {
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .tree-header:hover {
@@ -389,6 +390,12 @@ body.player-layout {
 .tree-toggle {
   margin-right: 10px;
   width: 20px;
+  text-align: center;
+}
+
+.tree-icon {
+  font-size: 16px;
+  width: 24px;
   text-align: center;
 }
 
