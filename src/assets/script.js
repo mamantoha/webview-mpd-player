@@ -7,6 +7,11 @@ function setupPlaylistHandlers() {
 
   playlistButton.addEventListener("click", () => {
     playlistOverlay.classList.add("visible");
+
+    const activeItem = document.querySelector('.playlist-item.active');
+    if (activeItem) {
+      activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   });
 
   backButton.addEventListener("click", () => {

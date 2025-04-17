@@ -147,9 +147,8 @@ class MusicPlayer {
       `.playlist-item[data-pos="${position}"]`
     );
 
+    // mark the song item as active
     if (item) {
-      // item.scrollIntoView({ behavior: "smooth", block: "center" });
-
       document.querySelectorAll(".playlist-item").forEach((item) => {
         item.classList.remove("active");
       });
