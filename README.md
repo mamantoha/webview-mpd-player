@@ -4,6 +4,10 @@ A lightweight MPD (Music Player Daemon) client built with Crystal and Webview. F
 
 This application serves as a demonstration of building real-time applications using Crystal and Webview. It showcases how to create responsive desktop applications that can handle live updates and user interactions while maintaining a lightweight footprint. The integration with MPD provides a practical example of managing real-time events, state synchronization, and UI updates in a Crystal-based desktop application.
 
+## Development Notes
+
+The user interface for the player was developed with assistance from ChatGPT and Cursor.
+
 ## Installation
 
 1. Clone the repository:
