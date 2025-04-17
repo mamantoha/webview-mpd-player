@@ -14,7 +14,7 @@ webview = Webview.window(
 )
 
 Thread.new do
-  mpd = MPD::Client.new(with_callbacks: true)
+  mpd = MPD::Client.new("localhost", 6600, with_callbacks: true)
   mpd.callbacks_timeout = 100.milliseconds
 
   mpd.on_callback do |event, value|
@@ -71,7 +71,7 @@ Thread.new do
   loop { sleep 1.second }
 end
 
-mpd_client = MPD::Client.new
+mpd_client = MPD::Client.new("localhost", 6600)
 
 webview.bind("mpdClient.status", Webview::JSProc.new { |a|
   if status = mpd_client.status
