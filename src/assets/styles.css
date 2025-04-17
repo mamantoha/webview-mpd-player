@@ -397,20 +397,27 @@ body.player-layout {
   border-bottom: 1px solid #2a2a2a;
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
   transition: background-color 0.2s;
 }
 
-.song-item:hover {
-  background-color: #2a2a2a;
+.song-item .song-icon {
+  font-size: 16px;
+  width: 24px;
+  text-align: center;
 }
 
 .song-item .song-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
   text-align: left;
+}
+
+.song-item:hover {
+  background-color: #2a2a2a;
 }
 
 .song-item .song-title {

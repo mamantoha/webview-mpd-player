@@ -179,6 +179,11 @@ class Library {
     item.className = "song-item";
     item.setAttribute("data-uri", song.uri);
 
+    const icon = document.createElement("span");
+    icon.className = "song-icon";
+    icon.textContent = "🎵";
+    item.appendChild(icon);
+
     const songInfo = document.createElement("div");
     songInfo.className = "song-info";
 
