@@ -9,12 +9,12 @@ This application serves as a demonstration of building real-time applications us
 
 ## Name Origin
 
-The name "Garnetune" is a playful combination of "Garnet" and "tune". Garnet is a type of crystal, which references the Crystal programming language used to build this application. Combined with "tune" for its music-playing capabilities, the name reflects both the technical foundation and musical purpose of the application.
+The name "Garnetune" is a playful combination of "Garnet" and "tune". [Garnet](https://en.wikipedia.org/wiki/Garnet) is a type of crystal, which references the [Crystal](https://crystal-lang.org/) programming language used to build this application. Combined with "tune" for its music-playing capabilities, the name reflects both the technical foundation and musical purpose of the application.
 
 
 ## Development Notes
 
-The user interface for the player was developed with assistance from ChatGPT and Cursor.
+The user interface for the player was developed with assistance from ChatGPT and Cursor AI Code Editor.
 
 ## Installation
 
