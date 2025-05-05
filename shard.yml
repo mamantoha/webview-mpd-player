@@ -14,6 +14,6 @@ targets:
   garnetune:
     main: src/main.cr
 
-crystal: '>= 1.15.0'
+crystal: 1.16.2
 
 license: MIT
