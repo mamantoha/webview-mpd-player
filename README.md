@@ -1,7 +1,6 @@
 <p align="left">
-  <img src="https://github.com/mamantoha/webview-mpd-player/raw/refs/heads/main/src/assets/icon.png" alt="webview-mpd-player" height="150px">
+  <img src="https://raw.githubusercontent.com/mamantoha/webview-mpd-player/refs/heads/main/src/assets/icon.png" alt="webview-mpd-player" height="150px">
 </p>
-
 
 A lightweight MPD (Music Player Daemon) client built with Crystal and Webview. Features a web-based interface for controlling MPD playback, managing playlists, and displaying album artwork. Includes a music library browser with artist/album organization.
 
@@ -10,7 +9,6 @@ This application serves as a demonstration of building real-time applications us
 ## Name Origin
 
 The name "Garnetune" is a playful combination of "Garnet" and "tune". [Garnet](https://en.wikipedia.org/wiki/Garnet) is a type of crystal, which references the [Crystal](https://crystal-lang.org/) programming language used to build this application. Combined with "tune" for its music-playing capabilities, the name reflects both the technical foundation and musical purpose of the application.
-
 
 ## Development Notes
 
