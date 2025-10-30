@@ -95,23 +95,23 @@ end
 
 mpd_client = MPD::Client.new(config["host"].as_s, config["port"].as_i)
 
-webview.bind("webview.set_title", Webview::JSProc.new { |args|
+webview.bind("webview.set_title", Webview::JSProc.new do |args|
   title = args.first.as_s
 
   webview.title = title
 
   JSON::Any.new(nil)
-})
+end)
 
-webview.bind("mpdClient.status", Webview::JSProc.new { |_|
+webview.bind("mpdClient.status", Webview::JSProc.new do |_|
   if status = mpd_client.status
     JSON.parse(status.to_json)
   else
     JSON::Any.new(nil)
   end
-})
+end)
 
-webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |args|
+webview.bind("mpdClient.toggle_playback", Webview::JSProc.new do |args|
   puts "toggle_playback called with arguments: #{args}"
 
   mpd_client.pause
@@ -123,19 +123,19 @@ webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |args|
   end
 
   JSON::Any.new(resp)
-})
+end)
 
-webview.bind("mpdClient.next_song", Webview::JSProc.new { |_|
+webview.bind("mpdClient.next_song", Webview::JSProc.new do |_|
   mpd_client.next
   JSON::Any.new("OK")
-})
+end)
 
-webview.bind("mpdClient.prev_song", Webview::JSProc.new { |_|
+webview.bind("mpdClient.prev_song", Webview::JSProc.new do |_|
   mpd_client.previous
   JSON::Any.new("OK")
-})
+end)
 
-webview.bind("mpdClient.album_art", Webview::JSProc.new { |_|
+webview.bind("mpdClient.album_art", Webview::JSProc.new do |_|
   if current_song = mpd_client.currentsong
     picture = mpd_client.readpicture(current_song["file"])
 
@@ -165,17 +165,17 @@ webview.bind("mpdClient.album_art", Webview::JSProc.new { |_|
   else
     JSON::Any.new(nil)
   end
-})
+end)
 
-webview.bind("mpdClient.current_song", Webview::JSProc.new { |_|
+webview.bind("mpdClient.current_song", Webview::JSProc.new do |_|
   if song = mpd_client.currentsong
     JSON.parse({"artist" => song["Artist"], "title" => song["Title"]}.to_json)
   else
     JSON.parse({"artist" => "", "title" => ""}.to_json)
   end
-})
+end)
 
-webview.bind("mpdClient.get_playback_state", Webview::JSProc.new { |_|
+webview.bind("mpdClient.get_playback_state", Webview::JSProc.new do |_|
   resp = ""
 
   mpd_client.status.try do |status|
@@ -183,9 +183,9 @@ webview.bind("mpdClient.get_playback_state", Webview::JSProc.new { |_|
   end
 
   JSON::Any.new(resp)
-})
+end)
 
-webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |_|
+webview.bind("mpdClient.get_current_position", Webview::JSProc.new do |_|
   if status = mpd_client.status
     if status["state"] == "stop"
       elapsed = total = 0.0
@@ -198,9 +198,9 @@ webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |_|
   else
     JSON::Any.new([JSON::Any.new(0), JSON::Any.new(0)])
   end
-})
+end)
 
-webview.bind("mpdClient.playlist", Webview::JSProc.new { |_|
+webview.bind("mpdClient.playlist", Webview::JSProc.new do |_|
   songs = [] of Hash(String, String | Bool)
 
   current_song_id = mpd_client.currentsong.try { |song| song["Id"] } || nil
@@ -219,40 +219,40 @@ webview.bind("mpdClient.playlist", Webview::JSProc.new { |_|
   end
 
   JSON.parse(songs.to_json)
-})
+end)
 
-webview.bind("mpdClient.clear", Webview::JSProc.new { |_|
+webview.bind("mpdClient.clear", Webview::JSProc.new do |_|
   mpd_client.clear
 
   JSON::Any.new("OK")
-})
+end)
 
-webview.bind("mpdClient.play", Webview::JSProc.new { |args|
+webview.bind("mpdClient.play", Webview::JSProc.new do |args|
   songpos = args.first.as_i
 
   mpd_client.play(songpos)
 
   JSON::Any.new("OK")
-})
+end)
 
-webview.bind("mpdClient.delete", Webview::JSProc.new { |args|
+webview.bind("mpdClient.delete", Webview::JSProc.new do |args|
   songpos = args.first.as_i
 
   mpd_client.delete(songpos)
 
   JSON::Any.new("OK")
-})
+end)
 
-webview.bind("mpdClient.move", Webview::JSProc.new { |args|
+webview.bind("mpdClient.move", Webview::JSProc.new do |args|
   from = args[0].as_i
   to = args[1].as_i
 
   mpd_client.move(from, to)
 
   JSON::Any.new("OK")
-})
+end)
 
-webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |args|
+webview.bind("mpdClient.set_song_position", Webview::JSProc.new do |args|
   # a is Array(JSON::Any)
   # from 0 to 1
   relative = args.first.as_f
@@ -264,9 +264,9 @@ webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |args|
   end
 
   JSON::Any.new("OK")
-})
+end)
 
-webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |args|
+webview.bind("mpdClient.toggle_mode", Webview::JSProc.new do |args|
   mode = args.first.as_s
 
   mpd_client.status.try do |status|
@@ -282,7 +282,7 @@ webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |args|
     end
   end
   JSON::Any.new("OK")
-})
+end)
 
 def get_config_dir
   config_dir = File.join(Path.home, ".config", "webview-mpd-player")
@@ -294,7 +294,7 @@ def get_library_data_path
   File.join(get_config_dir, "library-data.json")
 end
 
-webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |args|
+webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new do |args|
   puts "updateLibraryData called with arguments: #{args}"
   # Get all songs from MPD
   if all_items = mpd_client.listallinfo
@@ -346,9 +346,9 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |args|
   else
     JSON::Any.new(nil)
   end
-})
+end)
 
-webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |_|
+webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new do |_|
   if File.exists?(get_library_data_path)
     content = File.read(get_library_data_path)
     JSON.parse(content)
@@ -357,9 +357,9 @@ webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |_|
     webview.eval("window['mpdClient.updateLibraryData']()")
     JSON::Any.new(nil)
   end
-})
+end)
 
-webview.bind("mpdClient.add_to_playlist", Webview::JSProc.new { |args|
+webview.bind("mpdClient.add_to_playlist", Webview::JSProc.new do |args|
   urls = args.first.as_a.map(&.to_s)
 
   mpd_client.with_command_list do
@@ -369,7 +369,7 @@ webview.bind("mpdClient.add_to_playlist", Webview::JSProc.new { |args|
   end
 
   JSON::Any.new(nil)
-})
+end)
 
 if song = mpd_client.currentsong
   title = "#{song["Artist"]} - #{song["Title"]}"
