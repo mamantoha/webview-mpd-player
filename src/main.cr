@@ -106,7 +106,7 @@ webview.bind("webview.set_title", Webview::JSProc.new { |a|
   JSON::Any.new(nil)
 })
 
-webview.bind("mpdClient.status", Webview::JSProc.new { |a|
+webview.bind("mpdClient.status", Webview::JSProc.new { |_|
   if status = mpd_client.status
     JSON.parse(status.to_json)
   else
@@ -128,17 +128,17 @@ webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |a|
   JSON::Any.new(resp)
 })
 
-webview.bind("mpdClient.next_song", Webview::JSProc.new { |a|
+webview.bind("mpdClient.next_song", Webview::JSProc.new { |_|
   mpd_client.next
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.prev_song", Webview::JSProc.new { |a|
+webview.bind("mpdClient.prev_song", Webview::JSProc.new { |_|
   mpd_client.previous
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.album_art", Webview::JSProc.new { |a|
+webview.bind("mpdClient.album_art", Webview::JSProc.new { |_|
   if current_song = mpd_client.currentsong
     picture = mpd_client.readpicture(current_song["file"])
 
@@ -170,7 +170,7 @@ webview.bind("mpdClient.album_art", Webview::JSProc.new { |a|
   end
 })
 
-webview.bind("mpdClient.current_song", Webview::JSProc.new { |a|
+webview.bind("mpdClient.current_song", Webview::JSProc.new { |_|
   if song = mpd_client.currentsong
     JSON.parse({"artist" => song["Artist"], "title" => song["Title"]}.to_json)
   else
@@ -178,7 +178,7 @@ webview.bind("mpdClient.current_song", Webview::JSProc.new { |a|
   end
 })
 
-webview.bind("mpdClient.get_playback_state", Webview::JSProc.new { |a|
+webview.bind("mpdClient.get_playback_state", Webview::JSProc.new { |_|
   resp = ""
 
   mpd_client.status.try do |status|
@@ -188,7 +188,7 @@ webview.bind("mpdClient.get_playback_state", Webview::JSProc.new { |a|
   JSON::Any.new(resp)
 })
 
-webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |a|
+webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |_|
   if status = mpd_client.status
     if status["state"] == "stop"
       elapsed = total = 0.0
@@ -203,7 +203,7 @@ webview.bind("mpdClient.get_current_position", Webview::JSProc.new { |a|
   end
 })
 
-webview.bind("mpdClient.playlist", Webview::JSProc.new { |a|
+webview.bind("mpdClient.playlist", Webview::JSProc.new { |_|
   songs = [] of Hash(String, String | Bool)
 
   current_song_id = mpd_client.currentsong.try { |song| song["Id"] } || nil
@@ -224,7 +224,7 @@ webview.bind("mpdClient.playlist", Webview::JSProc.new { |a|
   JSON.parse(songs.to_json)
 })
 
-webview.bind("mpdClient.clear", Webview::JSProc.new { |a|
+webview.bind("mpdClient.clear", Webview::JSProc.new { |_|
   mpd_client.clear
 
   JSON::Any.new("OK")
@@ -324,10 +324,10 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
     end
 
     library_data = {
-      "artists" => grouped_songs.keys.sort_by(&.downcase).map do |artist_name|
+      "artists" => grouped_songs.keys.sort_by!(&.downcase).map do |artist_name|
         albums = grouped_songs[artist_name]
 
-        albums_data = albums.keys.sort_by(&.downcase).map do |album_name|
+        albums_data = albums.keys.sort_by!(&.downcase).map do |album_name|
           songs = albums[album_name]
           {
             "name"  => album_name,
@@ -351,7 +351,7 @@ webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
   end
 })
 
-webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |a|
+webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |_|
   if File.exists?(get_library_data_path)
     content = File.read(get_library_data_path)
     JSON.parse(content)
