@@ -98,8 +98,8 @@ end
 
 mpd_client = MPD::Client.new(config["host"].as_s, config["port"].as_i)
 
-webview.bind("webview.set_title", Webview::JSProc.new { |a|
-  title = a.first.as_s
+webview.bind("webview.set_title", Webview::JSProc.new { |args|
+  title = args.first.as_s
 
   webview.title = title
 
@@ -114,8 +114,8 @@ webview.bind("mpdClient.status", Webview::JSProc.new { |_|
   end
 })
 
-webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |a|
-  puts "toggle_playback called with arguments: #{a}"
+webview.bind("mpdClient.toggle_playback", Webview::JSProc.new { |args|
+  puts "toggle_playback called with arguments: #{args}"
 
   mpd_client.pause
 
@@ -230,35 +230,35 @@ webview.bind("mpdClient.clear", Webview::JSProc.new { |_|
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.play", Webview::JSProc.new { |a|
-  songpos = a.first.as_i
+webview.bind("mpdClient.play", Webview::JSProc.new { |args|
+  songpos = args.first.as_i
 
   mpd_client.play(songpos)
 
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.delete", Webview::JSProc.new { |a|
-  songpos = a.first.as_i
+webview.bind("mpdClient.delete", Webview::JSProc.new { |args|
+  songpos = args.first.as_i
 
   mpd_client.delete(songpos)
 
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.move", Webview::JSProc.new { |a|
-  from = a[0].as_i
-  to = a[1].as_i
+webview.bind("mpdClient.move", Webview::JSProc.new { |args|
+  from = args[0].as_i
+  to = args[1].as_i
 
   mpd_client.move(from, to)
 
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
+webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |args|
   # a is Array(JSON::Any)
   # from 0 to 1
-  relative = a.first.as_f
+  relative = args.first.as_f
 
   if current_song = mpd_client.currentsong
     total = current_song["Time"].to_i
@@ -269,8 +269,8 @@ webview.bind("mpdClient.set_song_position", Webview::JSProc.new { |a|
   JSON::Any.new("OK")
 })
 
-webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |a|
-  mode = a.first.as_s
+webview.bind("mpdClient.toggle_mode", Webview::JSProc.new { |args|
+  mode = args.first.as_s
 
   mpd_client.status.try do |status|
     state = status[mode] == "0"
@@ -297,8 +297,8 @@ def get_library_data_path
   File.join(get_config_dir, "library-data.json")
 end
 
-webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |a|
-  puts "updateLibraryData called with arguments: #{a}"
+webview.bind("mpdClient.updateLibraryData", Webview::JSProc.new { |args|
+  puts "updateLibraryData called with arguments: #{args}"
   # Get all songs from MPD
   if all_items = mpd_client.listallinfo
     songs = all_items.select { |item| item["file"]? }
@@ -362,8 +362,8 @@ webview.bind("mpdClient.loadLibraryData", Webview::JSProc.new { |_|
   end
 })
 
-webview.bind("mpdClient.add_to_playlist", Webview::JSProc.new { |a|
-  urls = a.first.as_a.map(&.to_s)
+webview.bind("mpdClient.add_to_playlist", Webview::JSProc.new { |args|
+  urls = args.first.as_a.map(&.to_s)
 
   mpd_client.with_command_list do
     urls.each do |url|
