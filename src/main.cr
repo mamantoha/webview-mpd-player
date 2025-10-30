@@ -56,9 +56,6 @@ Thread.new do
       webview.eval("window.musicPlayer.updateProgressBar(#{elapsed}, #{total})")
     when .song?
       if song = mpd.currentsong
-        title = "#{song["Artist"]} - #{song["Title"]}"
-        escaped = title.gsub("\\", "\\\\").gsub("'", "\\'")
-
         webview.eval("window.musicPlayer.updateSong()")
         webview.eval("window.musicPlayer.updateSongInPlaylist(#{song["Pos"]})")
       end
