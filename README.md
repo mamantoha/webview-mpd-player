@@ -26,7 +26,7 @@ The user interface for the player was developed with assistance from ChatGPT and
    - Crystal (>= 1.15.0)
    - MPD (Music Player Daemon)
    - pkg-config
-   - WebKit2GTK development files
+   - WebKit2GTK development files (webkit2gtk)
 
 3. Build the application:
    ```bash
