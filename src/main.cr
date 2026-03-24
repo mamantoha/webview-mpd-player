@@ -7,10 +7,14 @@ require "file_utils"
 class Config
   class_getter config_dir : String = File.join(Path.home, ".config", "webview-mpd-player")
   class_getter config_file : String = File.join(config_dir, "config.json")
-  class_getter default_config : JSON::Any = JSON.parse(%({
-    "host": "localhost",
-    "port": 6600
-  }))
+  class_getter default_config : JSON::Any = JSON.parse(
+    <<-HEREDOC
+      {
+        "host": "localhost",
+        "port": 6600
+      }
+      HEREDOC
+  )
 
   def self.load
     ensure_config_dir
